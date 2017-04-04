@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {
@@ -18,8 +18,7 @@
   },
   "scripts": {
     "test": "ts-node example  -F -P .",
-    "debug": "ts-node --inspect example  -F -P .",
-    "postinstall": "tsc"
+    "debug": "ts-node --inspect example  -F -P ."
   },
   "files": [
     "lib",
