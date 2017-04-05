@@ -7,10 +7,15 @@ import *as ReactDOM from 'react-dom/server';
 export type option = {
   /**模板热更新 */
   hotload?:boolean
-  /**默认不保留 react 标记 */
+  /**服务器渲染函数 */
   renderMethod?:'renderToString'|'renderToStaticMarkup'
 }
-export let render = ({ renderMethod='renderToStaticMarkup', hotload=false, }:option = {})=>
+/**默认配置 */
+export let option:option = {
+  hotload : false,
+  renderMethod : 'renderToStaticMarkup'
+}
+export let render = ({ renderMethod=option.renderMethod, hotload=option.hotload, }:option = {})=>
 (filepath:string,options:any,cb)=>{
       filepath = require.resolve(filepath)
   if( hotload ){
