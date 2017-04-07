@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {
@@ -33,5 +33,13 @@
     "react"
   ],
   "author": "shynome",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shynome/express-tsx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shynome/express-tsx/issues"
+  },
+  "homepage": "https://github.com/shynome/express-tsx#readme"
 }
