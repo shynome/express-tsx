@@ -5,11 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node2",
-      "request": "attach",
-      "name": "debug",
-      "address": "localhost",
-      "port": 9229
+      "type": "node",
+      "request": "launch",
+      "name": "代码测试",
+      "program": "${file}",
+      "protocol": "inspector"
     }
   ]
 }
