@@ -2,7 +2,7 @@
 import *as express from 'express'
 const app = express()
 
-import { render,option } from '../'
+import { render  } from '../'
 app.engine('.tsx',render({ hotload:true }))
 app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
