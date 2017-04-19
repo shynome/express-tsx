@@ -4,8 +4,11 @@
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {
-    "config-extend": "^0.1.1",
+    "config-extend": "^0.1.1"
+  },
+  "peerDependencies": {
     "react": "^15.4.2",
+    "express": "^4.15.2",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
@@ -13,7 +16,6 @@
     "@types/node": "^7.0.12",
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
-    "express": "^4.15.2",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
   },
