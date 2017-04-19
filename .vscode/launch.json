@@ -7,8 +7,15 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "测试服务",
+      "program": "${workspaceRoot}/example/ts.js",
+      "protocol": "inspector"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "代码测试",
-      "program": "${file}",
+      "program": "${workspaceRoot}/__test.js",
       "protocol": "inspector"
     }
   ]
