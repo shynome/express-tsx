@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "测试服务",
+      "name": "服务测试",
       "program": "${workspaceRoot}/example/ts.js",
       "protocol": "inspector"
     },

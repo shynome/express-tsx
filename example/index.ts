@@ -1,16 +1,11 @@
 
-import *as express from 'express'
+import express = require('express')
 const app = express()
 
-import { render  } from '../'
-app.engine('.tsx',render({ hotload:true }))
-app.set('views',__dirname+'/views')
-app.set('view engine','tsx')
-
-app.get('/',(req,res)=>res.render('index',{html:`hello world`}))
-app.get('/class',(req,res)=>res.render('class',{html:`hello world`}))
-
-const port = 3000
+export const port = 3000
 app.listen(port,()=>{
   console.log(`Express started on port ${port}`)
 })
+
+import { app as router } from "./router";
+app.use(router)

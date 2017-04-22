@@ -1,6 +1,5 @@
 
-import {App} from './App'
 export default (props)=>
-<App>
-  <h1 onClick={ console.log.bind(console) }>hello</h1>
-</App>
+<div>
+  <h1 onClick={ ()=>alert(6666666) }>{props.html}</h1>
+</div>
