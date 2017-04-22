@@ -9,6 +9,7 @@
   "peerDependencies": {
     "react": "^15.4.2",
     "express": "^4.15.2",
+    "typescript": "^2.2.2",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
@@ -16,6 +17,12 @@
     "@types/node": "^7.0.12",
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
+    "@types/requirejs": "^2.1.29",
+    "chokidar": "^1.6.1",
+    "express": "^4.15.2",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "require-dynamic-exec": "^1.1.4",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
   },
@@ -31,6 +38,7 @@
   "keywords": [
     "express",
     "tsx",
+    "jsx",
     "render",
     "view",
     "react"
