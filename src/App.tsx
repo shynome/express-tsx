@@ -19,11 +19,11 @@ export const WrapApp = (app,{ lang='zh-hms-cn', title='title', heads=[] },childr
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-  ${heads.join('')}
   <title>${title}</title>
   <script src="//cdn.bootcss.com/react/15.5.4/react.js"></script>
   <script src="//cdn.bootcss.com/react/15.5.4/react-dom.js"></script>
   <script src="//cdn.bootcss.com/require.js/2.3.3/require.min.js"></script>
+  ${heads.join('')}
 </head>
 <body>
   <div id="app">${app}</div>
