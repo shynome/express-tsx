@@ -4,6 +4,7 @@ declare global { var React:any }
 import path = require('path')
 import ReactDOM = require('react-dom/server');
 import ts = require('typescript')
+import chokidar = require('chokidar')
 
 import { Compile } from "./Compile";
 export { Compile } from "./Compile";
@@ -37,7 +38,7 @@ export function render(options:Options=defaultOptions){
   return async function(filepath:string, data:any, cb){
         filepath = require.resolve(filepath)
     if( hotload ){
-      delete require.cache[filepath] //粗暴地实现了热载
+      chokidar.watch(filepath).on('change',()=>delete require.cache[filepath])
     }
     let exports = require(filepath)
     let Render = exports && exports.default || exports
