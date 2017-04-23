@@ -62,6 +62,18 @@ export default (props)=>
   hello {props.who}
 </div>
 ```
-
-# 最后
-如果有好的建议欢迎提 issue | pr 哦 !
+# 示例运行
+- 克隆本项目
+  ```shell
+  git clone https://github.com/shynome/express-tsx.git
+  ```
+- 安装依赖
+  ```shell 
+  npm install
+  ```
+- 运行
+  ```shell
+  npm test
+  ```
+- 在浏览器中打开 [示例](http://localhost:3000/)
+-  最后 , 如果有好的建议欢迎提 issue | pr 哦 !
