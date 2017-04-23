@@ -50,7 +50,7 @@ export class Compile {
       })
   }
   compile = (file:string):Promise<string>=>new Promise((resolve,reject)=>{
-    // this.updateCache(file)
+    this.updateCache(file)
     this.file = file
     let output = this.languageService.getEmitOutput(file)
     this.languageService.getProgram
