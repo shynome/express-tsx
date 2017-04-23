@@ -6,6 +6,7 @@ import ReactDOM = require('react-dom/server');
 import ts = require('typescript')
 
 import { Compile } from "./Compile";
+export { Compile } from "./Compile";
 export class Options {
   /**模板热更新 */
   hotload?:boolean = false
