@@ -2,9 +2,9 @@
 # 介绍
 这是 express 中 jsx 模板渲染的一个实现 .
 
-它提供了两种渲染模式 , 一种 ["静态HTML渲染"](#静态HTML渲染) , 一种 ["服务器同构渲染"](#服务器同构渲染)
+它提供了两种渲染模式 , 一种 ["静态HTML渲染"](#user-content-静态-HTML-渲染) , 一种 ["服务器同构渲染"](#服务器同构渲染)
 
-## 静态 HTML渲染
+## 静态HTML渲染
 
 调用 `ReactDOM.renderToStaticMarkup` 方法渲染 `require('tsxmodule').default || require('tsxmodule')`
 
