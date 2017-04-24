@@ -45,8 +45,9 @@ export class Compile {
           shot = filesVersion.get(file)
         }
         let mainShot = filesVersion.get(this.file)
-        if(!mainShot.includeFiles.has(shot)){
+        if(mainShot.includeFiles.has(shot)){
           shot.expired = false
+        }else{
           mainShot.includeFiles.add(shot)
         }
         return shot.version.toString()
@@ -63,19 +64,24 @@ export class Compile {
   }
   compile = (file:string):string=>{
     let shot = this.filesVersion.get(file)
-    let expired:boolean
+    let code:string
+    let expired:boolean = true
     if(!shot){
-      shot = new Shot()
-      this.filesVersion.set(file,shot)
-      expired = shot.expired = true
+      expired = true
+    }else if(!!Array.from(new Set(shot.includeFiles)).filter(({expired})=>expired).length){
+      expired = true
     }else{
-      expired = !!Array.from(new Set(shot.includeFiles)).filter(({expired})=>expired).length
+      expired = false
+      code = shot.compiledCode
     }
     if(expired){
-      shot.includeFiles = new Set()
-      shot.compiledCode = this.service.getEmitOutput(this.file = file).outputFiles[0].text
+      code = this.service.getEmitOutput(this.file = file).outputFiles[0].text
+      if(!shot){
+        shot = this.filesVersion.get(file)
+      }
       shot.expired = false
+      shot.compiledCode = code
     }
-    return shot.compiledCode
+    return code
   }
 }
