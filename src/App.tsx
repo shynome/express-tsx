@@ -3,12 +3,15 @@ import React = require('react');
 export const BowserRender = (appModule,data)=>
 `
 <script>
-require(['${appModule}'],function(appModule){
-  var App = appModule && appModule.default || appModule
-  ReactDOM.render(
-    React.createElement(App,${JSON.stringify(data)}),
-    document.getElementById('app')
-  )
+require([],function(){
+  let appModule = Object.keys(require.s.contexts._.registry).slice(-2,-1)[0]
+  require([appModule],function(appModule){
+    var App = appModule && appModule.default || appModule
+    ReactDOM.render(
+      React.createElement(App,${JSON.stringify(data)}),
+      document.getElementById('app')
+    )
+  })
 })
 </script>
 `
