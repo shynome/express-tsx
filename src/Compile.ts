@@ -2,61 +2,80 @@ import ts = require('typescript')
 import fs = require('fs')
 import configExtend = require('config-extend')
 import chokidar = require('chokidar')
+export class Shot {
+  version:number = 0
+  compiledCode?:string
+  expired?:boolean = false
+  includeFiles? = new Set<Shot>()
+}
 export class Compile {
   static defaultCompilerOptions:ts.CompilerOptions = {
     module:ts.ModuleKind.AMD,
     target:ts.ScriptTarget.ES5,
     jsx:ts.JsxEmit.React,
-    outFile:'bundle.js'
+    outFile:'bundle.js',
   }
-  compilerOptions:ts.CompilerOptions
-  files = []
+  compilerOptions:ts.CompilerOptions = Compile.defaultCompilerOptions
   file:string
-  filesCache = new Map()
-  languageService:ts.LanguageService
+  filesVersion = new Map<string,Shot>()
+  service:ts.LanguageService
   constructor(compileOptions?:ts.CompilerOptions,rootDir=process.cwd()){
-    this.compilerOptions = configExtend({},Compile.defaultCompilerOptions,compileOptions)
-    this.languageService = ts.createLanguageService({
+    let compilerOptions = this.compilerOptions = configExtend(this.compilerOptions,compileOptions)
+    let { filesVersion } = this
+    let defaultLibFileName = ts.getDefaultLibFilePath(this.compilerOptions)
+    this.service = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
       getScriptFileNames:()=>[this.file],
-      getScriptVersion:(file)=>this.filesCache.get(file) && this.filesCache.get(file).toString(),
+      getScriptVersion:(file)=>{
+        let shot:Shot
+        if(!filesVersion.has(file)){
+          filesVersion.set(file,new Shot())
+          shot = filesVersion.get(file)
+          //add watch
+          chokidar.watch(file)
+            .on('change',function(){
+              shot.version ++
+              shot.expired = true
+            })
+            .on('unlink',function(this:chokidar.FSWatcher){
+              this.close()
+              filesVersion.delete(file)
+            })
+        }else{
+          shot = filesVersion.get(file)
+        }
+        let mainShot = filesVersion.get(this.file)
+        if(!mainShot.includeFiles.has(shot)){
+          shot.expired = false
+          mainShot.includeFiles.add(shot)
+        }
+        return shot.version.toString()
+      },
       getScriptSnapshot:(file)=>{
         if(!fs.existsSync(file)){
           return undefined
         }
         return ts.ScriptSnapshot.fromString(fs.readFileSync(file).toString())
       },
-      getCurrentDirectory:()=>process.cwd(),
-      getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
+      getCurrentDirectory:()=>rootDir,
+      getDefaultLibFileName:(options)=>defaultLibFileName
     })
   }
-  updateCache = (file:string)=>{
-    if(this.filesCache.has(file)){
-      return
+  compile = (file:string):string=>{
+    let shot = this.filesVersion.get(file)
+    let expired:boolean
+    if(!shot){
+      shot = new Shot()
+      this.filesVersion.set(file,shot)
+      expired = shot.expired = true
+    }else{
+      expired = !!Array.from(new Set(shot.includeFiles)).filter(({expired})=>expired).length
     }
-    this.filesCache.set(file,0)
-    this.files.push(file)
-    chokidar
-      .watch(file)
-      .on('change',()=>{
-        this.filesCache.set(file,this.filesCache.get(file)+1)
-      })
-      .on('unlink',()=>{
-        this.filesCache.delete(file)
-        let index = this.files.indexOf(file)
-        if(index!==-1){
-          this.files.splice(index,1)
-        }
-      })
+    if(expired){
+      shot.includeFiles = new Set()
+      shot.compiledCode = this.service.getEmitOutput(this.file = file).outputFiles[0].text
+      shot.expired = false
+    }
+    return shot.compiledCode
   }
-  compile = (file:string):Promise<string>=>new Promise((resolve,reject)=>{
-    this.updateCache(file)
-    this.file = file
-    let output = this.languageService.getEmitOutput(file)
-    this.languageService.getProgram
-    if( output.emitSkipped ){
-      return reject(`compile ${file} failed`)
-    }
-    resolve(output.outputFiles[0].text)
-  })
 }
