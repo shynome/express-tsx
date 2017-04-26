@@ -1,16 +1,11 @@
 # Change Log
 
 ## [Unreleased]
+- compile 支持第二个参数 `compile(code:string,compilerOptions)`
 
-## [2.1.2] - 2017-4-25
-### fixed
-- 上次的缓存层有毒 , 这次修复好了
-
-## [2.1.1] - 2017-4-23
-### fixed
-- 编译函数总是返回最后一次更新的编译内容 , 现在会返回符合预期的内容了
-### changed
-- 优化了 hotload 清除缓存模式
+## [2.1.4] - 2017-4-27
+### update
+- 导出 React 到全局声明
 
 ## [2.1.0] - 2017-4-23
 ### changed

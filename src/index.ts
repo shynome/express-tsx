@@ -1,6 +1,8 @@
 import React = require('react');
 (global as any).React = React
-declare global { var React:any }
+declare global {
+  namespace React {}
+}
 import path = require('path')
 import ReactDOM = require('react-dom/server');
 import ts = require('typescript')
