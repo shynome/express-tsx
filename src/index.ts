@@ -1,59 +1,49 @@
-import React = require('react');
-(global as any).React = React
-declare global {
-  namespace React {}
-}
-import path = require('path')
-import ReactDOM = require('react-dom/server');
-import ts = require('typescript')
-import chokidar = require('chokidar')
 
-import { Compile } from "./Compile";
-export { Compile } from "./Compile";
+import configExtend = require('config-extend')
+import React = require('react')
+import ReactDOM = require('react-dom/server')
+import { Router } from "express";
+
+import { compile as c,defaultOutDir } from "./Compile";
+export * from './Compile'
+import { ssrWrap } from "./ssrWrap";
+
 export class Options {
-  /**模板热更新 */
-  hotload?:boolean = false
-  /**文档类型 */
-  doctype?:string = '<!DOCTYPE html>'
-  /**服务器同构渲染 */
+  constructor(options?:Options){
+    configExtend(this,options)
+    this.renderToString = this.ssr?ReactDOM.renderToString:ReactDOM.renderToStaticMarkup
+  }
+  compile:(file:string)=>any = c.compile
+  renderToJSX?:(Render,data:Object)=>JSX.Element = React.createElement
+  renderToString?:(jsx)=>string
   ssr?:boolean = false
-  /**编译函数 */
-  compile? = new Compile().compile
-  ssrRender ?= async(Render,data,filepath:string,compile:(filepath:string)=>(Promise<string>|string))=>{
-    let app = React.createElement(Render,data)
-    let appModuleName = path.basename(filepath,path.extname(filepath))
-    let appDefineScript = `<script>${await compile(filepath)}</script>`
-    return WrapApp(ReactDOM.renderToString(app),data,[
-      appDefineScript,
-      BowserRender(appModuleName,data),
-    ])
-  }
-}
-/**默认配置 */
-export let defaultOptions:Options = new Options()
-import configExtend = require("config-extend")
-
-import { BowserRender, WrapApp } from './App'
-
-export function render(options:Options=defaultOptions){
-  const { hotload, doctype, ssr, compile, ssrRender }:Options = configExtend({},defaultOptions,options)
-  return async function(filepath:string, data:any, cb){
-        filepath = require.resolve(filepath)
-    if( hotload ){
-      chokidar.watch(filepath).on('change',()=>delete require.cache[filepath])
+  path?:string = '/'+defaultOutDir
+  requirejs?:RequireConfig = {
+    paths:{
+      'react'     :'//cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react',
+      'react-dom' :'//cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom',
     }
-    let exports = require(filepath)
+  }
+  ssrWrap?:(body:string,Render:string,data:Object,requirejs:RequireConfig)=>string = ssrWrap
+}
+
+export let middleware = Router()
+
+import { join } from 'path'
+export function render(options?:Options){
+  let { renderToJSX,renderToString,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
+  if(path){
+    middleware.use(path,c.middleware)
+  }
+  return (file:string,data:Object,send)=>
+  new Promise(async function __express(resolve){
+    let exports = ((file)=>require(file))(file)
     let Render = exports && exports.default || exports
-    let html:string = doctype
+    let body = renderToString( renderToJSX(Render,data) )
     if(ssr){
-      html += await ssrRender(Render,data,filepath,compile)
-    }else{
-      html += ReactDOM.renderToStaticMarkup(
-        React.createElement(Render,data)
-      )
+        body = ssrWrap(body,path+'/'+compile(file),data,requirejs)
     }
-    cb(null,html)
-  }
+    send(null,body)
+  })
+  .catch(send)
 }
-export let __express = render
-export default render
