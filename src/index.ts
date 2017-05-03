@@ -41,7 +41,7 @@ export function render(options?:Options){
     let Render = exports && exports.default || exports
     let body = renderToString( renderToJSX(Render,data) )
     if(ssr){
-        body = ssrWrap(body,path+'/'+compile(file),data,requirejs)
+        body = ssrWrap(body,path+'/'+compile(file).replace('\\','/'),data,requirejs)
     }
     send(null,body)
   })
