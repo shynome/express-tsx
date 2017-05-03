@@ -1,87 +1,84 @@
 import ts = require('typescript')
+import path = require('path')
+import express = require('express')
 import fs = require('fs')
 import configExtend = require('config-extend')
 import chokidar = require('chokidar')
-export class Shot {
-  version:number = 0
-  compiledCode?:string
-  expired?:boolean = false
-  includeFiles? = new Set<Shot>()
+import mkdirp = require('mkdirp')
+
+export let defaultOutDir = '.tsx_compile'
+export let defaultCompilerOptions:ts.CompilerOptions = {
+  module:ts.ModuleKind.AMD,
+  target:ts.ScriptTarget.ES5,
+  jsx:ts.JsxEmit.React,
+  sourceMap:true,
+  outDir:defaultOutDir,
 }
+
+export class Shot {
+  version:string = '1'
+  outputFile:string
+  expired:boolean = true
+}
+
 export class Compile {
-  static defaultCompilerOptions:ts.CompilerOptions = {
-    module:ts.ModuleKind.AMD,
-    target:ts.ScriptTarget.ES5,
-    jsx:ts.JsxEmit.React,
-    outFile:'bundle.js',
-  }
-  compilerOptions:ts.CompilerOptions = Compile.defaultCompilerOptions
-  file:string
-  filesVersion = new Map<string,Shot>()
-  service:ts.LanguageService
-  constructor(compileOptions?:ts.CompilerOptions,rootDir=process.cwd()){
-    let compilerOptions = this.compilerOptions = configExtend(this.compilerOptions,compileOptions)
-    let { filesVersion } = this
-    let defaultLibFileName = ts.getDefaultLibFilePath(this.compilerOptions)
+  static defaultCompilerOptions = defaultCompilerOptions
+  compilerOptions:ts.CompilerOptions = {}
+  outDir:string
+  constructor(options?:ts.CompilerOptions,rootDir=process.cwd()){
+    configExtend(this.compilerOptions,Compile.defaultCompilerOptions,options)
+    let { outDir } = this.compilerOptions
+    this.compilerOptions.outDir = path.join(rootDir,outDir)
     this.service = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
-      getScriptFileNames:()=>[this.file],
-      getScriptVersion:(file)=>{
-        let shot:Shot
-        if(!filesVersion.has(file)){
-          filesVersion.set(file,new Shot())
-          shot = filesVersion.get(file)
-          //add watch
-          chokidar.watch(file)
-            .on('change',function(){
-              shot.version ++
-              shot.expired = true
-            })
-            .on('unlink',function(this:chokidar.FSWatcher){
-              this.close()
-              filesVersion.delete(file)
-            })
-        }else{
-          shot = filesVersion.get(file)
-        }
-        let mainShot = filesVersion.get(this.file)
-        if(mainShot.includeFiles.has(shot)){
-          shot.expired = false
-        }else{
-          mainShot.includeFiles.add(shot)
-        }
-        return shot.version.toString()
-      },
-      getScriptSnapshot:(file)=>{
-        if(!fs.existsSync(file)){
-          return undefined
-        }
-        return ts.ScriptSnapshot.fromString(fs.readFileSync(file).toString())
-      },
+      getScriptFileNames:()=>Object.keys(this.files),
+      getScriptVersion:(file)=>this.files[file].version,
+      getScriptSnapshot:(file)=>!fs.existsSync(file)?undefined:ts.ScriptSnapshot.fromString(fs.readFileSync(file).toString()),
       getCurrentDirectory:()=>rootDir,
-      getDefaultLibFileName:(options)=>defaultLibFileName
+      getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
     })
+    this.FSWatch = chokidar.watch(rootDir)
+      .on('change',(file)=>{
+        if(!Reflect.has(this.files,file)){
+          return
+        }
+        let shot = this.files[file]
+        shot.version = (Number(shot.version) + 1).toString()
+        shot.expired = true
+      })
+    this.middleware = express.static(this.compilerOptions.outDir)
   }
-  compile = (file:string):string=>{
-    let shot = this.filesVersion.get(file)
-    let code:string
-    let expired:boolean = true
-    if(!shot){
-      expired = true
-    }else if(!!Array.from(new Set(shot.includeFiles)).filter(({expired})=>expired).length){
-      expired = true
-    }else{
-      expired = false
-      code = shot.compiledCode
-    }
-    if(expired){
-      code = this.service.getEmitOutput(this.file = file).outputFiles[0].text
-      if(!shot){
-        shot = this.filesVersion.get(file)
+  FSWatch:chokidar.FSWatcher
+  middleware:express.Handler
+  service:ts.LanguageService
+  files = new Proxy({} as {[key:string]:Shot},{
+    get(target,file:string){
+      file = require.resolve(file)
+      if(!target[file]){
+        target[file] = new Shot()
       }
-      shot.expired = false
-      shot.compiledCode = code
+      return target[file]
+    },
+  })
+  static filterFiles = (file:string)=>!(/node_modules/.test(file))
+  compile:(file:string)=>string = (file)=>{
+    file = require.resolve(file)
+    let deps:NodeModule[] = require.cache[file].children
+    let expiredFiles = [file].concat(deps.map(o=>o.filename)).filter(Compile.filterFiles).filter(f=>this.files[f].expired)
+    if(expiredFiles.length){
+      expiredFiles.forEach(file=>{
+        let outputFiles = this.service.getEmitOutput(file).outputFiles
+        outputFiles.forEach(o=>{
+          mkdirp.sync(path.dirname(o.name))
+          fs.writeFileSync(o.name,o.text)
+        })
+        let shot = this.files[file]
+        shot.expired = false
+        shot.outputFile = path.relative(this.compilerOptions.outDir,outputFiles.slice(-1)[0].name)
+      })
     }
-    return code
+    return this.files[file].outputFile
   }
 }
+
+export let compile = new Compile()
