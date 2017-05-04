@@ -13,7 +13,7 @@ export class Options {
     configExtend(this,options)
     this.renderToString = this.ssr?ReactDOM.renderToString:ReactDOM.renderToStaticMarkup
   }
-  compile:(file:string)=>any = c.compile
+  compile?:(file:string)=>any = c.compile
   renderToJSX?:(Render,data:Object)=>JSX.Element = React.createElement
   renderToString?:(jsx)=>string
   ssr?:boolean = false
