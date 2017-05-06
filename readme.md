@@ -47,7 +47,11 @@ export default (props)=>
 import Express = require('express')
 export const app = Express()
 
+<<<<<<< HEAD
 import { render,middleware } from "express-tsx";
+=======
+import { render,middleware } from "../";
+>>>>>>> 2296f1681880f57168dbf60ef9ed11d02a263dc8
 app.use(middleware)// 这步很重要
 app.engine('.tsx',render({ ssr:true }))
 app.set('views',__dirname+'/views')
