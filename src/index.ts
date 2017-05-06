@@ -38,8 +38,7 @@ import { join } from 'path'
 export function render(options?:Options){
   let { renderToJSX,renderToString,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
   if(path){
-    path = join('/',path).replace(/\\/g,'/')
-    middleware.use(path,c.middleware)
+    middleware.use(join('/',path).replace(/\\/g,'/'),c.middleware)
   }
   return (file:string,data:Object&{baseUrl:string},send)=>{
     try{
