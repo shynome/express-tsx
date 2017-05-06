@@ -56,6 +56,9 @@ export class Compile {
       file = require.resolve(file)
       if(!target[file]){
         target[file] = new Shot()
+        for(let key in target){
+          target[key].expired = true
+        }
       }
       return target[file]
     },
