@@ -67,7 +67,7 @@ export class Compile {
   compile:(file:string)=>string = (file)=>{
     file = require.resolve(file)
     let deps:NodeModule[] = require.cache[file].children
-    let expiredFiles = [file].concat(deps.map(o=>o.filename)).filter(Compile.filterFiles).filter(f=>this.files[f].expired)
+    let expiredFiles = deps.map(o=>o.filename).concat(file).filter(Compile.filterFiles).filter(f=>this.files[f].expired)
     if(expiredFiles.length){
       expiredFiles.forEach(file=>{
         let outputFiles = this.service.getEmitOutput(file).outputFiles
