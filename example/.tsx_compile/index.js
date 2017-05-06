@@ -10,4 +10,3 @@ define(["require", "exports", "react"], function (require, exports, React) {
             React.createElement("body", null, props.children));
     };
 });
-//# sourceMappingURL=App.js.map
