@@ -11,7 +11,7 @@ export let defaultCompilerOptions:ts.CompilerOptions = {
   module:ts.ModuleKind.AMD,
   target:ts.ScriptTarget.ES5,
   jsx:ts.JsxEmit.React,
-  sourceMap:true,
+  sourceMap:false,
   outDir:defaultOutDir,
 }
 
