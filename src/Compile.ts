@@ -51,7 +51,7 @@ export class Compile {
   FSWatch:chokidar.FSWatcher
   middleware:express.Handler
   service:ts.LanguageService
-  files = new Proxy({} as {[key:string]:Shot},{
+  files = new Proxy<{[key:string]:Shot}>({},{
     get(target,file:string){
       file = require.resolve(file)
       if(!target[file]){
