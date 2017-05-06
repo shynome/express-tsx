@@ -14,7 +14,7 @@
 import Express = require('express')
 export const app = Express()
 
-import { render } from "../";
+import { render } from "express-tsx";
 app.engine('.tsx',render())
 app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
@@ -47,7 +47,8 @@ export default (props)=>
 import Express = require('express')
 export const app = Express()
 
-import { render } from "../";
+import { render,middleware } from "express-tsx";
+app.use(middleware)// 这步很重要
 app.engine('.tsx',render({ ssr:true }))
 app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
