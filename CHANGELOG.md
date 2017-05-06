@@ -1,7 +1,10 @@
 # Change Log
 
 ## [Unreleased]
-- compile 支持第二个参数 `compile(code:string,compilerOptions)`
+
+## [2.2.4] - 2017-5-7
+### fixed
+- ssrWrap 使用了'/'定位到输出文件夹路径, 导致require不能正常解析模块路径
 
 ## [2.1.4] - 2017-4-27
 ### update
