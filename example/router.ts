@@ -2,6 +2,9 @@
 import { Router } from "express";
 export const app = Router()
 
+import { middleware } from "../src";
+app.use(middleware)
+
 import { app as staticHTMLRender } from "./staticHTMLRender";
 app.use('/staticHTMLRender',staticHTMLRender)
 

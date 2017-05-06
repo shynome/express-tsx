@@ -1,12 +1,6 @@
-
+import React = require('react');
+import { App } from './App';
 export default (props)=>
-<html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-  <title>{props.title}</title>
-</head>
-<body>
+<App {...props}>
   hello {props.who}
-</body>
-</html>
+</App>

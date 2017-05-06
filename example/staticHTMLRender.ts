@@ -2,8 +2,8 @@
 import Express = require('express')
 export const app = Express()
 
-import { render } from "../";
-app.engine('.tsx',render())
+import { render } from "../src";
+app.engine('.tsx',render({}))
 app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
 
