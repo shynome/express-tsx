@@ -17,7 +17,7 @@ export class Options {
   renderToJSX?:(Render,data:Object)=>JSX.Element = React.createElement
   renderToString?:(jsx)=>string
   ssr?:boolean = false
-  path?:string = '/'+defaultOutDir
+  path?:string = defaultOutDir
   requirejs?:RequireConfig = {
     paths:{
       'react'     :'//cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react',
@@ -28,22 +28,31 @@ export class Options {
 }
 
 export let middleware = Router()
+import { relative } from "path";
+middleware.use((req,res,next)=>{
+  res.locals.baseUrl = relative(req.url,'/').replace(/\\/g,'/')
+  next()
+})
 
 import { join } from 'path'
 export function render(options?:Options){
   let { renderToJSX,renderToString,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
   if(path){
+    path = join('/',path).replace(/\\/g,'/')
     middleware.use(path,c.middleware)
   }
-  return (file:string,data:Object,send)=>
-  new Promise(async function __express(resolve){
-    let exports = ((file)=>require(file))(file)
-    let Render = exports && exports.default || exports
-    let body = renderToString( renderToJSX(Render,data) )
-    if(ssr){
-        body = ssrWrap(body,path+'/'+compile(file).replace('\\','/'),data,requirejs)
+  return (file:string,data:Object&{baseUrl:string},send)=>{
+    try{
+      let exports = ((file)=>require(file))(file)
+      let Render = exports && exports.default || exports
+      let body = renderToString( renderToJSX(Render,data) )
+      if(ssr){
+        let scriptUrl = join(data.baseUrl,path,compile(file)).replace(/\\/g,'/')
+        body = ssrWrap(body,scriptUrl,data,requirejs)
+      }
+      send(null,body)
+    }catch(err){
+      send(err)
     }
-    send(null,body)
-  })
-  .catch(send)
+  }
 }
