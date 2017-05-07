@@ -40,14 +40,14 @@ export function render(options?:Options){
   if(path){
     middleware.use(join('/',path).replace(/\\/g,'/'),c.middleware)
   }
-  return (file:string,data:Object&{baseUrl:string,setting:Object,_locals:Object},send)=>{
+  return (file:string,data:Object&{baseUrl:string,settings:Object,_locals:Object},send)=>{
     try{
       let exports = ((file)=>require(file))(file)
       let Render = exports && exports.default || exports
       let body = renderToString( renderToJSX(Render,data) )
       if(ssr){
         let scriptUrl = join(data.baseUrl,path,compile(file)).replace(/\\/g,'/')
-        delete data.setting
+        delete data.settings
         delete data._locals
         body = ssrWrap(body,scriptUrl,data,requirejs)
       }
