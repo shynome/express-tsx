@@ -1,5 +1,6 @@
 import React = require('react')
-import './index'
+import *as deep from './deep1'
+console.log(deep)
 
 export default (props)=>
 <div onClick={ ()=>alert(props.who) }>
