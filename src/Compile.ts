@@ -64,10 +64,10 @@ export class Compile {
     },
   })
   static filterFiles = (file:string)=>!(/node_modules/.test(file))
-  static getDeps = (m:NodeModule)=>m.children.reduce((deps,m)=>deps.concat(Compile.getDeps(m)),[m.filename])
+  static getDeps = (m:NodeModule):string[]=>m.children.reduce((deps,m)=>deps.concat(Compile.getDeps(m)),[m.filename])
   compile:(file:string)=>string = (file)=>{
     file = require.resolve(file)
-    let deps:NodeModule[] = Compile.getDeps(require.cache[file])
+    let deps = Compile.getDeps(require.cache[file])
     let expiredFiles = deps.filter(Compile.filterFiles).filter(f=>this.files[f].expired)
     if(expiredFiles.length){
       expiredFiles.forEach(file=>{
