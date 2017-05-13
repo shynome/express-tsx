@@ -11,11 +11,11 @@ import { ssrWrap } from "./ssrWrap";
 export class Options {
   constructor(options?:Options){
     configExtend(this,options)
-    this.renderToString = this.ssr?ReactDOM.renderToString:ReactDOM.renderToStaticMarkup
   }
   compile?:(file:string)=>any = c.compile
   renderToJSX?:(Render,data:Object)=>JSX.Element = React.createElement
-  renderToString?:(jsx)=>string
+  renderToStaticMarkup?:(jsx)=>string = ReactDOM.renderToStaticMarkup
+  renderToString?:(jsx)=>string = ReactDOM.renderToString
   ssr?:boolean = false
   path?:string = defaultOutDir
   requirejs?:RequireConfig = {
@@ -36,7 +36,7 @@ middleware.use((req,res,next)=>{
 
 import { join } from 'path'
 export function render(options?:Options){
-  let { renderToJSX,renderToString,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
+  let { renderToJSX,renderToString,renderToStaticMarkup,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
   if(path){
     middleware.use(join('/',path).replace(/\\/g,'/'),c.middleware)
   }
@@ -44,7 +44,7 @@ export function render(options?:Options){
     try{
       let exports = ((file)=>require(file))(file)
       let Render = exports && exports.default || exports
-      let body = renderToString( renderToJSX(Render,data) )
+      let body = (ssr?renderToString:renderToStaticMarkup)( renderToJSX(Render,data) )
       if(ssr){
         let scriptUrl = join(data.baseUrl,path,compile(file)).replace(/\\/g,'/')
         delete data.settings
