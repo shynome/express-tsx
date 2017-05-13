@@ -26,7 +26,7 @@ export class Options {
   }
   ssrWrap?:(body:string,Render:string,data:Object,requirejs:RequireConfig)=>string = ssrWrap
 }
-
+export let defaultOptions = new Options()
 export let middleware = Router()
 import { relative } from "path";
 middleware.use((req,res,next)=>{
@@ -36,7 +36,7 @@ middleware.use((req,res,next)=>{
 
 import { join } from 'path'
 export function render(options?:Options){
-  let { renderToJSX,renderToString,renderToStaticMarkup,ssrWrap,compile,path,requirejs,ssr } = new Options(options)
+  let { renderToJSX,renderToString,renderToStaticMarkup,ssrWrap,compile,path,requirejs,ssr }:Options = configExtend({},defaultOptions,options)
   if(path){
     middleware.use(join('/',path).replace(/\\/g,'/'),c.middleware)
   }
