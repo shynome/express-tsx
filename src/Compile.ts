@@ -18,8 +18,9 @@ export let defaultCompilerOptions:ts.CompilerOptions = {
 export class Shot {
   version:string = '1'
   outputFile:string
-  filename:string
   expired:boolean = true
+  /**cache import files */
+  imports?:string[]
 }
 
 export class Compile {
@@ -39,24 +40,25 @@ export class Compile {
       getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
     })
     this.FSWatch = chokidar.watch(rootDir,{ignored:'.git'})
-      .on('change',(file)=>{
-        if(!Reflect.has(this.files,file)){
-          return
-        }
-        let shot = this.files[file]
-        shot.version = (Number(shot.version) + 1).toString()
-        shot.expired = true
-      })
+      .on('change',this.updateFilesShot)
     this.middleware = express.static(this.compilerOptions.outDir)
   }
   FSWatch:chokidar.FSWatcher
+  updateFilesShot = (file)=>{
+    if(!Reflect.has(this.files,file)){
+      return
+    }
+    let shot = this.files[file]
+    shot.version = (Number(shot.version) + 1).toString()
+    shot.expired = true
+  }
   middleware:express.Handler
   service:ts.LanguageService
   files = new Proxy<{[key:string]:Shot}>({},{
     get(target,file:string){
       file = require.resolve(file)
       if(!target[file]){
-        target[file] = new Shot()
+        let shot = target[file] = new Shot()
         for(let key in target){
           target[key].expired = true
         }
@@ -64,14 +66,17 @@ export class Compile {
       return target[file]
     },
   })
-  static filterFiles = (file:string)=>!(/node_modules/.test(file))
-  static getDeps = (m:NodeModule):string[]=>m.children.reduce((deps,m)=>deps.concat(Compile.getDeps(m)),[m.filename])
+  static getImports = (filename:string)=>// Time-consuming: 650 ms
+    ts.createProgram([filename],{ jsx:ts.JsxEmit.React }).getSourceFiles()
+    .map(s=>s.fileName)
+    .filter(f=>!(/\.d\.ts$/.test(f)))
   compile:(file:string)=>string = (file)=>{
-    file = require.resolve(file)
-    let deps = Compile.getDeps(require.cache[file])
-    let expiredFiles = deps.filter(Compile.filterFiles).filter(f=>this.files[f].expired)
+    let shot = this.files[file]
+    shot.imports = shot.imports || Compile.getImports(file)
+    let expiredFiles = shot.imports.filter(f=>this.files[f].expired)
     if(expiredFiles.length){
-      expiredFiles.forEach(file=>{
+      shot.imports = Compile.getImports(file)
+      shot.imports.filter(f=>this.files[f].expired).forEach(file=>{
         let outputFiles = this.service.getEmitOutput(file).outputFiles
         outputFiles.forEach(o=>{
           mkdirp.sync(path.dirname(o.name))
