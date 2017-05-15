@@ -1,5 +1,8 @@
-import React = require('react');
+import React = require('react')
+import *as deep2 from './deep1'
 export default (props)=>
-<div>
-  hello <span style={{color:'red'}}>{props.who}</span>
+<div onClick={ ()=>alert(props.who) }>
+  {
+    JSON.stringify(deep2)
+  }
 </div>
