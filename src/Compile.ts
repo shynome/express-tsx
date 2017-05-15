@@ -18,6 +18,7 @@ export let defaultCompilerOptions:ts.CompilerOptions = {
 export class Shot {
   version:string = '1'
   outputFile:string
+  filename:string
   expired:boolean = true
 }
 
@@ -37,7 +38,7 @@ export class Compile {
       getCurrentDirectory:()=>rootDir,
       getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
     })
-    this.FSWatch = chokidar.watch(rootDir)
+    this.FSWatch = chokidar.watch(rootDir,{ignored:'.git'})
       .on('change',(file)=>{
         if(!Reflect.has(this.files,file)){
           return
