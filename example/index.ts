@@ -1,11 +1,7 @@
 
-import express = require('express')
-const app = express()
+export const log = console.log.bind(console)
 
-export const port = 3000
-app.listen(port,()=>{
-  console.log(`Express started on port ${port}`)
-})
+export const PORT = 3000
+export const https_PORT = 443
 
-import { app as router } from "./router";
-app.use(router)
+export * from './http'

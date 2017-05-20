@@ -16,7 +16,8 @@
       "type": "node",
       "request": "launch",
       "name": "代码测试",
-      "program": "${workspaceRoot}/__test.js",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}/example",      
       "protocol": "inspector"
     }
   ]

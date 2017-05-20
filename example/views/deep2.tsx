@@ -1,1 +1,3 @@
-export let a = 44444444444444444444
+export let b = 'egwgwgtfadf'
+export * from './deep3'
+console.log(444444444)
