@@ -21,7 +21,7 @@ export let push = (file,data:config)=>{
   let imports_path = 
     imports.map(module=>`${relativePath}?filename=${module}`)
     .map(m=>m.replace(/\.(tsx|ts|js|jsx)$/,''))
-    .map(encodeURIComponent)
+    .map(encodeURI)
   if(res.push){// http2 push
     // res.push(dataurl,contentType).end(JSON.stringify(data))
     imports.forEach((module,index)=>{
