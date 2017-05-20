@@ -67,10 +67,13 @@ export class Compile {
   })
   getAllImports = (file:string):string[]=>{
     file = this.files[file].filename 
-    let resolvedModules:any[] = (this.service.getProgram().getSourceFile(file) as any).resolvedModules
+    let resolvedModules:any[] = (this.service.getProgram().getSourceFile(file) as any).resolvedModules // typescript 没有公开的属性
     let modules:string[] = []
     if(resolvedModules){
-      modules = Array.from(resolvedModules.values()).map<string>((a:any)=>a.resolvedFileName) // typescript 没有公开的属性
+      modules = 
+        Array.from(resolvedModules.values()) 
+        .filter(a=>a) //filter void
+        .map<string>((a:any)=>a.resolvedFileName) 
     }
     return modules.reduce( (p,v)=>p.concat(this.getAllImports(v)), [file] )
   }
