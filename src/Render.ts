@@ -8,6 +8,11 @@ export class Options {
   constructor(options?:Options){
     configExtend(this,options)
   }
+  /**
+   * 开启的话将会在服务器同构渲染     
+   * 默认调用的是 ReactDOM.renderToString 方法    
+   * 可以传入一个 ssrRender 方法替代默认渲染方式    
+   */
   ssr?:boolean = false
   ssrRender?:ssrRender 
     = (render,data)=>require('react-dom/server').renderToString( require('react').createElement(render,data) )

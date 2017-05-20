@@ -2,8 +2,29 @@
 import Express = require('express')
 export const app = Express()
 
-import { render } from "../src";
-app.engine('.tsx',render())
+import { render,requirejsConfig,defaultOptions } from "../src";
+
+//你可以在这里配置 requirejs , 这下面是一些默认配置
+requirejsConfig({
+  paths:{
+    'requirejs'   :'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min',
+    'react'       :'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react',
+    'react-dom'   :'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom',
+  },
+  shim:{
+    'react-dom'   :['react']
+  }
+})
+
+app.engine('.tsx',render({
+  ssr:false, //推荐关闭
+  // ssrRender,
+  // ssrWrap, //这个是核心 , 不建议替换
+  // placeholder:'loading', //你可以在这里放个 loading 动画
+}))
+//此外你还可以在这 `defaultOptions` , 设置所有的默认值(对已经使用了 `render` 的不起效 )
+defaultOptions.placeholder = 'loading'
+
 app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
 
