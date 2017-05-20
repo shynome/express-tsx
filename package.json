@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {
@@ -23,6 +23,8 @@
     "@types/requirejs": "^2.1.29",
     "@types/spdy": "^3.4.1",
     "express": "^4.15.2",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "require-dynamic-exec": "^1.1.64",
@@ -31,8 +33,7 @@
     "typescript": "^2.2.2"
   },
   "scripts": {
-    "test": "node example/ts.js",
-    "pretest": "tsc"
+    "prepublish": "gulp tsc"
   },
   "files": [
     "lib",
