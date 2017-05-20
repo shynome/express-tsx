@@ -17,7 +17,7 @@ return `
 <body>
   <div id="app">${ body }</div>
   <script>${requirejsScript}</script>
-  <script src="${requirejs.paths.requirejs}.js"></script>
+  <script src="${requirejs.paths['requirejs']}.js"></script>
   <script>
   require(['react','react-dom'].concat(${JSON.stringify(data.imports.slice(0,2))}),function(React,ReactDOM,data,exports){
     var Render = exports && exports.View || exports.default || exports
