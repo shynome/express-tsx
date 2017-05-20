@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "2.2.93",
+  "version": "3.0.0",
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {
@@ -21,10 +21,12 @@
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
     "@types/requirejs": "^2.1.29",
+    "@types/spdy": "^3.4.1",
     "express": "^4.15.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "require-dynamic-exec": "^1.1.4",
+    "require-dynamic-exec": "^1.1.64",
+    "spdy": "^3.4.4",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
   },
