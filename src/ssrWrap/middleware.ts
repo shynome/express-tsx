@@ -22,7 +22,7 @@ middleware.use(function(req,res,next){
   let originRender = res.render
   res.locals.req = req
   res.locals.res = res
-  res.render = function(file:string,data,){
+  res.render = function(file:string,data={},){
     if(req.query.callback === 'define'){
       res.jsonp(data)
     }else{
