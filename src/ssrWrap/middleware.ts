@@ -42,7 +42,7 @@ export const basePath = '/express-tsx'
 middleware.use(basePath,function(req,res){
   res.type('js')
   let module = req.param('filename','')
-      module = module.replace(/\.js$/,'')
+      module = module.replace(/\.(js|tsx|ts|jsx)$/,'')
   let moduleTry:string
   switch(true){
   default:
@@ -51,6 +51,8 @@ middleware.use(basePath,function(req,res){
   case Reflect.has(compile.files,moduleTry=module):
   case Reflect.has(compile.files,moduleTry=module+'.tsx'):
   case Reflect.has(compile.files,moduleTry=module+'.ts'):
+  case Reflect.has(compile.files,moduleTry=module+'.jsx'):
+  case Reflect.has(compile.files,moduleTry=module+'.js'):
     res.send(compile.compile(moduleTry).outputFiles[0].text)
     break
   }
