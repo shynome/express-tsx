@@ -35,7 +35,7 @@ export let push = (file,data:config)=>{
   let dataurl = format(url)
   let imports = compile.getImports(file)
   res.setHeader('ETag',encodeURI(imports.join(';')))
-  let preloaded = (req.header('if-none-match') || '').split(';')
+  let preloaded = decodeURI((req.header('if-none-match') || '')).split(';')
       imports =   difference(imports,preloaded)
   // debugger
   let relativePath = join(req.app.path(),basePath).replace(/\\/g,'/')
