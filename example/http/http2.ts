@@ -1,5 +1,5 @@
 import http2 = require('spdy')
-
+import express = require('express')
 import { readFileSync } from "fs";
 import { join } from "path";
 const agentOptions:http2.ServerOptions = {
@@ -7,7 +7,9 @@ const agentOptions:http2.ServerOptions = {
   cert:readFileSync(join(__dirname,'./certificate/localhost_bundle.crt')),
 }
 
-import { app } from "./app";
+import { app as main } from "../router";
+export const app = express()
+app.use(main)
 export const server = http2.createServer(agentOptions,app as any)
 
 import { https_PORT,log } from "../";

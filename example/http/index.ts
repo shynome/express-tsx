@@ -1,1 +1,2 @@
-export * from './http2'
+import './app'
+import './http2'
