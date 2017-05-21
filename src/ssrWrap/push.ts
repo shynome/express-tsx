@@ -15,7 +15,10 @@ export let push = (file,data:config)=>{
   data = new config(data)
   let req = data.req
   let res = data.res
-  let dataurl = '?callback=define'
+  let url = parse(req.originalUrl)
+      url.search = url.search || ''
+      url.search += '&callback=define'
+  let dataurl = format(url)
   let imports = compile.getImports(file)
   let relativePath = join(req.app.path(),basePath).replace(/\\/g,'/')
   let imports_path = 
@@ -23,7 +26,7 @@ export let push = (file,data:config)=>{
     .map(m=>m.replace(/\.(tsx|ts|js|jsx)$/,''))
     .map(encodeURI)
   if(res.push){// http2 push
-    // res.push(dataurl,contentType).end(JSON.stringify(data))
+    res.push(dataurl,contentType).end(`define(${JSON.stringify(res.ViewData)})`)
     imports.forEach((module,index)=>{
       res.push(imports_path[index],contentType).end(compile.compile(module).outputFiles[0].text)
     })

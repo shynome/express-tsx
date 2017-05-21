@@ -18,6 +18,11 @@ export class config {
   //don't need show
   _locals:any
 }
+declare module 'http' {
+  interface ServerResponse {
+    ViewData:{[key:string]:any}
+  }
+}
 middleware.use(function(req,res,next){
   let originRender = res.render
   res.locals.req = req
@@ -26,6 +31,7 @@ middleware.use(function(req,res,next){
     if(req.query.callback === 'define'){
       res.jsonp(data)
     }else{
+      res.ViewData = Object.assign({},data)
       originRender.apply(this,arguments)
     }
     return this
