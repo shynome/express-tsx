@@ -34,7 +34,7 @@ export let push = (file,data:config)=>{
       url.search += '&callback=define'
   let dataurl = format(url)
   let imports = compile.getImports(file)
-  res.setHeader('ETag',imports.join(';'))
+  res.setHeader('ETag',encodeURI(imports.join(';')))
   let preloaded = (req.header('if-none-match') || '').split(';')
       imports =   difference(imports,preloaded)
   // debugger
