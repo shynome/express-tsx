@@ -39,6 +39,7 @@ middleware.use(function(req,res,next){
   next()
 })
 export const basePath = '/express-tsx'
+export const MaxAge = 60*60*12
 middleware.use(basePath,function(req,res){
   res.type('js')
   let module = req.param('filename','')
@@ -53,6 +54,7 @@ middleware.use(basePath,function(req,res){
   case Reflect.has(compile.files,moduleTry=module+'.ts'):
   case Reflect.has(compile.files,moduleTry=module+'.jsx'):
   case Reflect.has(compile.files,moduleTry=module+'.js'):
+    res.setHeader('cache-control','max-age='+MaxAge)
     res.send(compile.compile(moduleTry).outputFiles[0].text)
     break
   }
