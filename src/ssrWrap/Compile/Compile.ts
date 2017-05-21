@@ -33,7 +33,7 @@ export class Compile {
     this.service = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
       getScriptFileNames:()=>Object.keys(this.files),
-      getScriptVersion:(file)=>this.files[file].version,
+      getScriptVersion:this.getScriptVersion,
       getScriptSnapshot:(file)=>!fs.existsSync(file)?undefined:ts.ScriptSnapshot.fromString(fs.readFileSync(file).toString()),
       getCurrentDirectory:()=>rootDir,
       getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
@@ -53,6 +53,7 @@ export class Compile {
   }
   service:ts.LanguageService
   static normalize = (f)=>f.replace(/\\/g,'/')
+  getScriptVersion = (file:string)=>this.files[file].version
   files = new Proxy<{[key:string]:Shot}>({},{
     get(target,filename:string){
       filename = Compile.normalize(filename) //路径标准化
