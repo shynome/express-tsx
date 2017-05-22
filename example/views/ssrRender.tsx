@@ -2,7 +2,7 @@ import React = require('react')
 import *as deep2 from './deep1'
 export default (props)=>
 <div onClick={ ()=>alert(props.who) }>
-  {
-    JSON.stringify(deep2)
-  }
+  { JSON.stringify(deep2) }
+  <br/>
+  { JSON.stringify(props) }
 </div>

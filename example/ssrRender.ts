@@ -29,4 +29,4 @@ app.set('views',__dirname+'/views')
 app.set('view engine','tsx')
 
 app.get('/deep/path',(req,res)=>res.render('ssrRender',{ who:'express-tsx', title:'express-tsx' }))
-app.get('/',(req,res)=>res.render('ssrRender',{ who:'express-tsx', title:'express-tsx' }))
+app.get('/',(req,res)=>res.render('ssrRender',{  }))
