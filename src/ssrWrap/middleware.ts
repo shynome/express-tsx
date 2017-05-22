@@ -40,9 +40,12 @@ middleware.use(function(req,res,next){
 })
 export const basePath = '/express-tsx'
 export const MaxAge = 60*60*12
+import { etag } from "./push";
+import { parse } from "url";
 middleware.use(basePath,function(req,res){
   res.type('js')
-  let module = req.param('filename','')
+  res.setHeader('cache-control','max-age='+MaxAge)
+  let module = parse(req.url).pathname.slice(1)
       module = module.replace(/\.(js|tsx|ts|jsx)$/,'')
   let moduleTry:string
   switch(true){
@@ -54,8 +57,14 @@ middleware.use(basePath,function(req,res){
   case Reflect.has(compile.files,moduleTry=module+'.ts'):
   case Reflect.has(compile.files,moduleTry=module+'.jsx'):
   case Reflect.has(compile.files,moduleTry=module+'.js'):
-    res.setHeader('cache-control','max-age='+MaxAge)
-    res.send(compile.compile(moduleTry).outputFiles[0].text)
+    let tag = etag(moduleTry)
+    if( tag === req.header('if-none-match') ){
+      res.status(304)
+      res.end()
+    }else{
+      res.setHeader('ETag',tag)
+      res.send(compile.compile(moduleTry).outputFiles[0].text)
+    }
     break
   }
 })

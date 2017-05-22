@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "3.0.29",
+  "version": "3.0.30",
   "description": "express view tsx render",
   "main": "lib/index.js",
   "dependencies": {

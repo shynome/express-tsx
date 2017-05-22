@@ -19,6 +19,20 @@ return `
   <script>${requirejsScript}</script>
   <script src="${requirejs.paths['requirejs']}.js"></script>
   <script>
+  var imports = ${JSON.stringify(data.imports)}.slice(1)
+  var importsMap = imports.reduce(function(map,module_and_version){
+    var module = module_and_version.split('?')[0]
+        map[module] = module_and_version
+    return map
+  },{})
+  requirejs.config({
+    map:imports.reduce(function(map,m){
+      map[m] = importsMap
+      return map
+    },{})
+  })
+  </script>
+  <script>
   require(['react','react-dom'].concat(${JSON.stringify(data.imports.slice(0,2))}),function(React,ReactDOM,data,exports){
     var Render = exports && exports.View || exports.default || exports
     ReactDOM.render(
