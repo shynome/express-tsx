@@ -45,7 +45,7 @@ import { parse } from "url";
 middleware.use(basePath,function(req,res){
   res.type('js')
   res.setHeader('cache-control','max-age='+MaxAge)
-  let module = parse(req.url).pathname.slice(1)
+  let module = decodeURI(parse(req.url).pathname).slice(1)
       module = module.replace(/\.(js|tsx|ts|jsx)$/,'')
   let moduleTry:string
   switch(true){
