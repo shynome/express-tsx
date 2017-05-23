@@ -39,12 +39,12 @@ middleware.use(function(req,res,next){
   next()
 })
 export const basePath = '/express-tsx'
-export const MaxAge = 60*60*12
+export let maxAge = 60*60*12
 import { etag } from "./push";
 import { parse } from "url";
 middleware.use(basePath,function(req,res){
   res.type('js')
-  res.setHeader('cache-control','max-age='+MaxAge)
+  res.setHeader('cache-control','max-age='+maxAge)
   let module = decodeURI(parse(req.url).pathname).slice(1)
       module = module.replace(/\.(js|tsx|ts|jsx)$/,'')
   let moduleTry:string

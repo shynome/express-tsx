@@ -3,14 +3,14 @@ import { request } from "http";
 import { format, Url, parse } from "url";
 import { relative,join } from 'path'
 import { difference } from "lodash";
-import { MaxAge } from "./middleware";
+import { maxAge } from "./middleware";
 export const contentType = {
   request:{
     accept:'*/*',
   },
   response:{
     'content-type'    :'application/javascript',
-    'Cache-Control'   :'max-age='+MaxAge,
+    'Cache-Control'   :'max-age='+maxAge,
   }
 }
 export const dataContentType = {
