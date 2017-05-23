@@ -3,12 +3,11 @@
   "version": "3.0.31",
   "description": "express view tsx render",
   "main": "lib/index.js",
+  "types": "src/index.ts",  
   "dependencies": {
     "chokidar": "^1.7.0",
     "config-extend": "^0.1.1",
-    "etag": "^1.8.0",
-    "lodash": "^4.17.4",
-    "mkdirp": "^0.5.1"
+    "lodash": "^4.17.4"
   },
   "peerDependencies": {
     "react": "^15.4.2",
@@ -43,7 +42,6 @@
     "lib",
     "src"
   ],
-  "types": "src/index.ts",
   "keywords": [
     "express",
     "tsx",
