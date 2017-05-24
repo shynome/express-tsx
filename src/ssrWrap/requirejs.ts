@@ -11,7 +11,8 @@ export let requirejs:RequireConfig = {
 }
 import fs = require('fs')
 import { compile } from "./Compile";
-export let requirejsConfigPath = compile.files[require.resolve('./_requirejs.config')].filename
+import { join } from "path";
+export let requirejsConfigPath = compile.files[join(__dirname,'../../static/require.config.ts')].filename
 export let requirejsConfig = (requirejsConfig?:RequireConfig)=>new Promise((resolve,reject)=>{
   configExtend(requirejs,requirejsConfig)
   fs.writeFileSync(

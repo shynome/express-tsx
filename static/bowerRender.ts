@@ -1,5 +1,5 @@
-void function(currentScript:HTMLScriptElement){
-  var imports:string[] = JSON.parse(currentScript.text)
+void function(currentScript){
+  var imports = JSON.parse(currentScript.text)
   var script_imports = imports.slice(1)
   var importsMap = script_imports.reduce(function(map,module_and_version){
     var module = module_and_version.split('?')[0]
