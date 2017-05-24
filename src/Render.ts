@@ -1,8 +1,10 @@
 
 import configExtend = require('config-extend')
 
+import { Response,Request } from 'express'
+import { ServerResponse } from "spdy";
 export type ssrRender = (render:any,data:Object)=>string
-export type ssrWrap = (body:string,file:string,data:any)=>string
+export type ssrWrap = (body:string,ViewData:config,file:string,data:config)=>string
 import { wrap as _ssrWrap } from "./ssrWrap";
 export class Options {
   constructor(options?:Options){
@@ -21,26 +23,56 @@ export class Options {
 }
 
 export let defaultOptions = new Options()
+export let filterKeys = ['_locals','settings','cache','req','res']
+export let getViewData = (data:Object)=>
+Object.keys(data).filter(key=>filterKeys.indexOf(key)===-1)
+.reduce((target,key)=>(target[key]=data[key],target),{})
+export class config {
+  constructor(data:config){
+    configExtend(this,data)
+  }
+  title = 'express-tsx'
+  lang = 'en'
+  req:Request
+  res:Response & ServerResponse
+}
 
 export function Render(options?:Options){
   let { ssr, ssrRender, ssrWrap, placeholder  }:Options = 
       configExtend({},defaultOptions,options,)
-  return function render(file:string,data:Object,send:(error:Error,body:string,)=>void){
+  return function render(file:string,data:config,send:(error:Error,body:string,)=>void){
     let err:Error = null
     let body:string = placeholder
+    let req = data.req
+    let res = data.res
     try{
-      if(ssr){
-        let exports = require(file)
-        let render = exports && exports.View || exports.default || exports
-        body = ssrRender( render, data, )
+      let ViewData:any = getViewData(data)
+      let callback = req.query.callback
+      switch(true){
+      case typeof callback === 'string':
+        body = JSON.stringify(ViewData)
+        if(callback.length){
+          res.type('js')
+          body = `typeof ${callback} === 'function' && ${callback}(${body})`
+        }else{
+          res.type('json')
+        }
+        break
+      default:
+        if(ssr){
+          let exports = require(file)
+          let render = exports && exports.View || exports.default || exports
+          body = ssrRender( render, ViewData, )
+        }
+        body = ssrWrap( body, ViewData, file, data )
+        break
       }
-      body = ssrWrap( body, file, data, )
     }
     catch(e){
       err = e
     }
     finally{
-        send(err,body)
+      send(err,body)
     }
   }
 }

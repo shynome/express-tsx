@@ -3,7 +3,6 @@ import path = require('path')
 import fs = require('fs')
 import configExtend = require('config-extend')
 import chokidar = require('chokidar')
-import mkdirp = require('mkdirp')
 
 export let defaultCompilerOptions:ts.CompilerOptions = {
   module:ts.ModuleKind.AMD,
@@ -59,9 +58,6 @@ export class Compile {
       filename = Compile.normalize(filename) //路径标准化
       if(!target[filename]){
         let shot = target[filename] = new Shot(filename)
-        // for(let key in target){
-        //   target[key].expired = true
-        // }
       }
       return target[filename]
     },

@@ -9,9 +9,15 @@ export let requirejs:RequireConfig = {
     'react-dom'   :['react']
   }
 }
-export let requirejsScript:string
-export let requirejsConfig = (requirejsConfig?:RequireConfig)=>{
+import fs = require('fs')
+import { compile } from "./Compile";
+export let requirejsConfigPath = compile.files[require.resolve('./_requirejs.config')].filename
+export let requirejsConfig = (requirejsConfig?:RequireConfig)=>new Promise((resolve,reject)=>{
   configExtend(requirejs,requirejsConfig)
-  requirejsScript = 'var requirejs='+JSON.stringify(requirejs)
-}
+  fs.writeFileSync(
+    requirejsConfigPath,
+    'var requirejs='+JSON.stringify(requirejs),
+    // (err)=>err?reject(err):resolve(requirejsConfigPath)
+  )
+})
 requirejsConfig() // init , create requirejsBuffer

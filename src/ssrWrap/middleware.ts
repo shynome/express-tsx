@@ -3,39 +3,16 @@ import { ServerResponse, } from "spdy";
 export const middleware = Router()
 import { compile } from "./Compile";
 import configExtend = require('config-extend')
-export class config {
-  constructor(data:config){
-    configExtend(this,data)
-  }
-  //pre set
-  req:Request
-  res:Response & ServerResponse
-  //placeholder
-  title = 'express-tsx'
-  lang = 'en'
-  imports:string[]
-  baseUrl:string
-  //don't need show
-  _locals:any
-}
 declare module 'http' {
   interface ServerResponse {
-    ViewData:{[key:string]:any}
+    res:ServerResponse & Response
+    req:Request
   }
 }
+export let extname_use_express_tsx = ['.tsx']
 middleware.use(function(req,res,next){
-  let originRender = res.render
-  res.locals.req = req
   res.locals.res = res
-  res.render = function(file:string,data={},){
-    if(req.query.callback === 'define'){
-      res.jsonp(data)
-    }else{
-      res.ViewData = Object.assign({},data)
-      originRender.apply(this,arguments)
-    }
-    return this
-  }
+  res.locals.req = req
   next()
 })
 export const basePath = '/express-tsx'
