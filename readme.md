@@ -11,7 +11,9 @@
 import Express = require('express')
 export const app = Express()
 
-import { render,requirejsConfig,defaultOptions } from "../src";
+import { render,requirejsConfig,defaultOptions,middleware } from "../src";
+
+app.use(middleware) // important !!! 你需要在渲染页面之前注入这个中间件 , 这个中间会使用 '/express-tsx' 路径 , 不能覆盖该路径
 
 //你可以在这里配置 requirejs , 这下面是一些默认配置
 requirejsConfig({
