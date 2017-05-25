@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "服务测试",
       "program": "${workspaceRoot}/example/ts.js",
-      "cwd": "${workspaceRoot}/example",
+      "cwd": "${workspaceRoot}",
       "protocol": "inspector"
     },
     {
