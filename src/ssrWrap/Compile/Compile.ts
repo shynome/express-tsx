@@ -51,13 +51,15 @@ export class Compile {
     shot.expired = true
   }
   service:ts.LanguageService
-  static normalize = (f)=>f.replace(/\\/g,'/')
+  static normalize = (f:string)=>f.replace(/\\/g,'/')
+    //One Drive letter has two cases ( E: or e:)
+    .split(':').map((drive,index)=>index?drive:drive.toLowerCase()).join(':')
   getScriptVersion = (file:string)=>this.files[file].version
   files = new Proxy<{[key:string]:Shot}>({},{
     get(target,filename:string){
       filename = Compile.normalize(filename) //路径标准化
       if(!target[filename]){
-        let shot = target[filename] = new Shot(filename)
+        target[filename] = new Shot(filename)
       }
       return target[filename]
     },
