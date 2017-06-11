@@ -69,5 +69,5 @@ export default (props)=>
   npm test
   ```
   ps: 如果你使用 vscode 的话 , 你可以直接 f5 运行
-- 在浏览器中打开 [示例](https://lo.shynome.com:443/)
+- 在浏览器中打开 [示例:https://lo.shynome.com:443/](https://lo.shynome.com:443/)
 -  最后 , 如果有好的建议欢迎提 issue | pr 哦 !
