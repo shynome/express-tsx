@@ -1,4 +1,4 @@
-void function(currentScript){
+void function(requirejs:Require,currentScript){
   var imports = JSON.parse(currentScript.text)
   var script_imports = imports.slice(1)
   var importsMap = script_imports.reduce(function(map,module_and_version){
@@ -19,5 +19,4 @@ void function(currentScript){
       document.getElementById('app')
     )
   })
-  return imports
-}(document.currentScript || document.scripts[document.scripts.length-1] as any)
+}(requirejs as any,document.currentScript || document.scripts[document.scripts.length-1] as any)
