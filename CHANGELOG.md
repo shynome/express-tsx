@@ -1,6 +1,11 @@
 # Change Log
 
 ## [Unreleased]
+- ts2.4(未发布) `import()` 异步加载兼容
+
+## [3.1.0] - 2017-6-11
+### optimization
+- 添加 glomarous(css in js) 到默认配置中 , 现在可以尝试使用该组件进行模块式开发了
 
 ## [2.2.5] - 2017-5-7
 ### fixed
