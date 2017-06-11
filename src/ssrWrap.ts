@@ -1,16 +1,16 @@
 
-import { requirejsConfigPath,requirejs } from './requirejs'
+import { requirejsConfigPath, requirejsUrl, } from './requirejs'
 import { ssrWrap } from './'
 import configExtend = require('config-extend')
 import { config } from "../";
-import { push } from "./push";
+import { push } from "./";
 import { compile } from "./Compile";
 import { join } from "path";
-export let bowerRenderScript = compile.files[join(__dirname,'../../static/bowerRender.tsx')].filename
+export const bowerRenderScript = compile.files[join(__dirname,'../static/bowerRender.tsx')].filename
 export const wrap:ssrWrap = function( body, ViewData, file, data  ){
     ViewData = new config(ViewData)
-let { imports, pushEtag } = push( body, ViewData, file,data)
-let [ requirejsConfigPath,bowerRenderScript ] = imports.slice(-2)
+let { imports, pushEtag } = push(file, data, ViewData, [ requirejsConfigPath, bowerRenderScript, ])
+let [ requirejsConfigUrl, bowerRenderScriptUrl, ] = imports.slice(-2)
 return `
 <!DOCTYPE html>
 <html lang="${ ViewData.lang }">
@@ -22,9 +22,9 @@ return `
 </head>
 <body>
   <div id="app">${ body }</div>
-  <script src="${requirejsConfigPath}"></script>
-  <script src="${requirejs.paths['requirejs']}.js"></script>
-  <script src="${bowerRenderScript}">${JSON.stringify(imports)}</script>
+  <script src="${requirejsConfigUrl}"></script>
+  <script src="${requirejsUrl}.js"></script>
+  <script src="${bowerRenderScriptUrl}">${JSON.stringify(imports)}</script>
   <script>
   </script>
 </body>

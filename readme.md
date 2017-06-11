@@ -17,14 +17,14 @@ app.use(middleware) // important !!! 你需要在渲染页面之前注入这个�
 
 //你可以在这里配置 requirejs , 这下面是一些默认配置
 requirejsConfig({
+  baseUrl         :'//unpkg.com/',
   paths:{
-    'requirejs'   :'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min',
-    'react'       :'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react',
-    'react-dom'   :'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom',
+    'requirejs'   :'requirejs@2.3.3/require',
+    'react'       :'react@15.5.4/dist/react.min',
+    'react-dom'   :'react-dom@15.5.4/dist/react-dom.min',
+    'glamor'      :'glamor@2.20.25/umd/index.min',
+    'glamorous'   :'glamorous@3.22.1/dist/glamorous.umd.min',
   },
-  shim:{
-    'react-dom'   :['react']
-  }
 })
 
 app.engine('.tsx',render({

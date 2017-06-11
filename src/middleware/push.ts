@@ -1,4 +1,4 @@
-import { compile } from "./Compile";
+import { compile } from "../Compile";
 import { request } from "http";
 import { format, Url, parse } from "url";
 import { relative,join } from 'path'
@@ -28,18 +28,17 @@ export let etag = (module)=>compile.getScriptVersion(module)
 export let ssrEtag = module=>module+'?v='+etag(module)
 import { Response,Request } from "express";
 import { config } from "../";
-import { bowerRenderScript } from "./ssrWrap";
-import { requirejsConfigPath } from "./requirejs";
-export let push = function push(body:string, ViewData:config, file:string,data:config){
+export let push = function push( file:string, data:config, ViewData:config, import_others?:string[], ){
   let req = data.req
   let res = data.res
+  let define = data.callback
   //make dataurl
   let url = parse(req.originalUrl)
       url.search = url.search || ''
-      url.search += '&callback=define'
+      url.search += `&callback=${define}`
   let dataurl = format(url)
   //get imports
-  let imports = compile.getImports(file).concat([requirejsConfigPath,bowerRenderScript])
+  let imports = compile.getImports(file).concat(import_others)
   //get need preload_imports
   res.setHeader('ETag',encodeURI(imports.map(ssrEtag).join(';')))
   let preloaded = decodeURI((req.header('if-none-match') || '')).split(';')
@@ -50,7 +49,7 @@ export let push = function push(body:string, ViewData:config, file:string,data:c
   let preload_imports_path = preload_imports.map(pushEtag)
   // http2 push
   if(res.push){
-    res.push(dataurl,dataContentType).end(`define(${JSON.stringify(ViewData)})`)
+    res.push(dataurl,dataContentType).end(`${define}(${JSON.stringify(ViewData)})`)
     preload_imports.forEach((module,index)=>{
       let modulePath = preload_imports_path[index]
       let body = compile.compile(module).outputFiles[0].text

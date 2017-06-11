@@ -37,7 +37,7 @@ export class Compile {
       getCurrentDirectory:()=>rootDir,
       getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
     })
-    this.FSWatch = chokidar.watch(rootDir,{ ignored:['.git'] })
+    this.FSWatch = chokidar.watch(rootDir,{ ignored:/\.git/ })
       .on('change',this.updateFilesShot)
   }
   FSWatch:chokidar.FSWatcher

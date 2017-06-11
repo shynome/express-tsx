@@ -21,7 +21,6 @@ export class Options {
   ssrWrap?:ssrWrap = _ssrWrap
   placeholder?:string = ''
 }
-
 export let defaultOptions = new Options()
 export let filterKeys = ['_locals','settings','cache','req','res']
 export let getViewData = (data:Object)=>
@@ -33,6 +32,7 @@ export class config {
   }
   title = 'express-tsx'
   lang = 'en'
+  callback = 'define'
   req:Request
   res:Response & ServerResponse
 }
