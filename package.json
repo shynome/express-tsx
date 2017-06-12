@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "3.1.11",
+  "version": "3.1.12",
   "description": "express render tsx",
   "main": "lib/index.js",
   "types": "src/index.ts",
@@ -12,6 +12,8 @@
   "dependencies": {
     "chokidar": "^1.7.0",
     "config-extend": "^0.1.1",
+    "glamor": "^2.20.25",
+    "glamorous": "^3.23.0",
     "lodash": "^4.17.4",
     "requirejs": "^2.3.3"
   },

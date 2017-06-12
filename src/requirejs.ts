@@ -26,7 +26,11 @@ requirejs.config({
     'react-dom'   :'react-dom@15.5.4/dist/react-dom.min',
     'glamor'      :'glamor@2.20.25/umd/index.min',
     'glamorous'   :'glamorous@3.22.1/dist/glamorous.umd.min',
+    'es6-shim'    :'es6-shim@0.35.3/es6-shim.min',
   },
+  shim :{
+    'glamorous'   :[ 'es6-shim' ]
+  }
 })
 // Compatible with previous interfaces
 export const requirejsConfig = (requirejsConfig?:RequireConfig)=>requirejs.config(requirejsConfig)

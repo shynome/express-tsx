@@ -1,4 +1,7 @@
 void function(requirejs:Require,currentScript){
+  if('assign' in Object){
+    define('es6-shim',function(){})
+  }
   var imports = JSON.parse(currentScript.text)
   var script_imports = imports.slice(1)
   var importsMap = script_imports.reduce(function(map,module_and_version){
