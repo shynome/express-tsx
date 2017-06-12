@@ -2,10 +2,11 @@
 
 ## [Unreleased]
 - ts2.4(未发布) `import()` 异步加载兼容
+- `sourceMap` `file:///` 协议支持 
 
 ## [3.1.1] - 2017-6-13
 ### add
-- 添加 sourceMap 支持
+- 添加 `sourceMap` 支持
 
 ## [3.1.0] - 2017-6-11
 ### optimization
