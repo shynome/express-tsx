@@ -42,7 +42,7 @@ export let push = function push( file:string, data:config, ViewData:config, impo
   //get need preload_imports
   res.setHeader('ETag',encodeURI(imports.map(ssrEtag).join(';')))
   let preloaded = decodeURI((req.header('if-none-match') || '')).split(';')
-  let preload_imports = difference(imports.map(ssrEtag),preloaded).map(m=>m.split('?')[0])
+  let preload_imports:string[] = difference(imports.map(ssrEtag),preloaded).map(m=>m.split('?')[0])
   let relativePath = join(req.app.path(),basePath).replace(/\\/g,'/')
   /**map module to absolute url */ 
   let pushEtag = module=>encodeURI(`${relativePath}/${module.replace(/\.(tsx|ts|js|jsx)$/,'')}?v=${etag(module)}`)
@@ -52,7 +52,7 @@ export let push = function push( file:string, data:config, ViewData:config, impo
     res.push(dataurl,dataContentType).end(`${define}(${JSON.stringify(ViewData)})`)
     preload_imports.forEach((module,index)=>{
       let modulePath = preload_imports_path[index]
-      let body = compile.compile(module).outputFiles[0].text
+      let body = compile.getCompiledCode(module).text
       res.push(modulePath,configExtend({ response:{ ETag:etag(module) } },contentType)).end(body)
       return modulePath
     })

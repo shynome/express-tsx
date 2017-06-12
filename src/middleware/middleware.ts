@@ -25,7 +25,8 @@ middleware.use(basePath,function(req,res){
   res.type('js')
   res.setHeader('cache-control','max-age='+maxAge)
   let module = decodeURI(parse(req.url).pathname).slice(1)
-      module = module.replace(/\.(tsx|ts|js|jsx)$/,'')
+  let isLoadMap = module.slice(-4) === '.map'
+      module = module.replace(/\.(tsx|ts|js|jsx)(\.map|)$/,'')
   let moduleTry:string
   switch(true){
   default:
@@ -42,7 +43,16 @@ middleware.use(basePath,function(req,res){
       res.end()
     }else{
       res.setHeader('ETag',tag)
-      res.send(compile.compile(moduleTry).outputFiles[0].text)
+      let body:string
+      if(isLoadMap){
+        body = compile.getSourceMap(moduleTry).text
+      }else if(typeof req.query.v === 'undefined'){
+        res.sendFile(moduleTry)
+        return
+      }else{
+        body = compile.getCompiledCode(moduleTry).text
+      }
+      res.send(body)
     }
     break
   }

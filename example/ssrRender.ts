@@ -2,8 +2,9 @@
 import Express = require('express')
 export const app = Express()
 
-import { render,requirejsConfig,defaultOptions } from "../src";
+import { render,requirejsConfig,defaultOptions,compile } from "../src";
 
+compile.compilerOptions.sourceMap = true
 //你可以在这里配置 requirejs , 这下面是一些默认配置
 requirejsConfig({
   baseUrl         :'//unpkg.com/',

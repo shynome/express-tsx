@@ -77,5 +77,7 @@ export class Compile {
     return modules.reduce( (p,v)=>p.concat(this.getAllImports(v)), [file] )
   }
   getImports = (file:string)=>this.getAllImports(file).filter(m=>!(/node_modules/.test(m)))
-  compile = (filename)=>this.service.getEmitOutput(filename)
+  compile = (filename:string)=>this.service.getEmitOutput(filename)
+  getCompiledCode = (filename:string)=>this.compile(filename).outputFiles.slice(-1)[0]
+  getSourceMap = (filename:string)=>this.compile(filename).outputFiles[0]
 }
