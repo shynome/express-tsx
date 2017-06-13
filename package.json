@@ -20,7 +20,7 @@
     "glamorous": "^3.23.0",
     "react": "^15.4.2",
     "express": "^4.15.2",
-    "typescript": "^2.3.2",
+    "typescript": "^2.4.0",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
@@ -32,6 +32,8 @@
     "@types/requirejs": "^2.1.29",
     "@types/spdy": "^3.4.1",
     "express": "^4.15.2",
+    "glamor": "^2.20.25",
+    "glamorous": "^3.23.0",
     "gulp": "^3.9.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
