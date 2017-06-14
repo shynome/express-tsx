@@ -19,7 +19,7 @@ requirejs.config = function(config:RequireConfig){
 }
 // default config
 requirejs.config({
-  baseUrl         :'//unpkg.com/',
+  baseUrl         :'https://unpkg.com/',
   paths:{
     'requirejs'   :'requirejs@2.3.3/require',
     'react'       :'react@15.5.4/dist/react.min',
