@@ -5,9 +5,9 @@
 - `heroku` 兼容
 - `sourceMap` `file:///` 协议支持 
 
-## [3.1.14] - 2017-6-14
+## [3.1.15] - 2017-6-15
 ### fixed
-- relativePath 取的根路径 `req.app.path()`  有问题 , 更改为 `req.baseUrl` // 具体看 `git` (不会链接,囧)
+- relativePath 取的根路径 `req.app.path()`  有问题 , 更改为 新增变量`req.expressTsxRoot`
 
 ## [3.1.1] - 2017-6-13
 ### add

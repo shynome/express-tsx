@@ -7,6 +7,7 @@ declare module 'http' {
   interface ServerResponse {
     res:ServerResponse & Response
     req:Request
+    /**统一使用最早获取到的路径 , 以便重用缓存 */
     expressTsxRoot:string
   }
 }
@@ -17,7 +18,7 @@ middleware.use(function(req,res,next){
     return next()
   }
   // 以下只需设置一次
-  res.expressTsxRoot = req.baseUrl // 统一使用最短的路径 , 以便重用缓存
+  res.expressTsxRoot = req.baseUrl
   res.locals.res = res
   res.locals.req = req
   res.locals.callback = res.locals.callback || 'define'
