@@ -2,7 +2,12 @@
 
 ## [Unreleased]
 - ts2.4(未发布) `import()` 异步加载兼容
+- `heroku` 兼容
 - `sourceMap` `file:///` 协议支持 
+
+## [3.1.14] - 2017-6-14
+### fixed
+- relativePath 取的根路径 `req.app.path()`  有问题 , 更改为 `req.baseUrl` // 具体看 `git` (不会链接,囧)
 
 ## [3.1.1] - 2017-6-13
 ### add
