@@ -43,7 +43,7 @@ export let push = function push( file:string, data:config, ViewData:config, impo
   res.setHeader('ETag',encodeURI(imports.map(ssrEtag).join(';')))
   let preloaded = decodeURI((req.header('if-none-match') || '')).split(';')
   let preload_imports:string[] = difference(imports.map(ssrEtag),preloaded).map(m=>m.split('?')[0])
-  let relativePath = join(req.baseUrl,basePath).replace(/\\/g,'/')
+  let relativePath = join(res.expressTsxRoot,basePath).replace(/\\/g,'/')
   /**map module to absolute url */ 
   let pushEtag = module=>encodeURI(`${relativePath}/${module.replace(/\.(tsx|ts|js|jsx)$/,'')}?v=${etag(module)}`)
   let preload_imports_path = preload_imports.map(pushEtag)

@@ -7,11 +7,17 @@ declare module 'http' {
   interface ServerResponse {
     res:ServerResponse & Response
     req:Request
+    expressTsxRoot:string
   }
 }
 export let extname_use_express_tsx = ['.tsx']
 import { push } from "./push";
 middleware.use(function(req,res,next){
+  if( typeof res.expressTsxRoot === 'string'){
+    return next()
+  }
+  // 以下只需设置一次
+  res.expressTsxRoot = req.baseUrl // 统一使用最短的路径 , 以便重用缓存
   res.locals.res = res
   res.locals.req = req
   res.locals.callback = res.locals.callback || 'define'
