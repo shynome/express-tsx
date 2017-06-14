@@ -7,7 +7,7 @@ import { render,requirejsConfig,defaultOptions,compile } from "../src";
 compile.compilerOptions.sourceMap = true
 //你可以在这里配置 requirejs , 这下面是一些默认配置
 requirejsConfig({
-  baseUrl         :'//unpkg.com/',
+  baseUrl         :'https://unpkg.com/',
   paths:{
     'requirejs'   :'requirejs@2.3.3/require',
     'react'       :'react@15.5.4/dist/react.min',

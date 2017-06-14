@@ -10,6 +10,8 @@ app.use('/staticHTMLRender',staticHTMLRender)
 
 import { app as ssrRender } from "./ssrRender";
 app.use('/ssrRender',ssrRender)
-app.use('/ssrRender/dddddd/ee',ssrRender)
+
+import { app as deepPathTest } from "./deepPath.test";
+app.use('/deepPath',Router().use('/test',deepPathTest))
 
 app.use('/',(req,res)=>res.sendFile(__dirname+'/views/index.html'))
