@@ -1,6 +1,7 @@
 
 #dist file
 lib
+static/require.config.tsx
 
 #test file
 __test*
