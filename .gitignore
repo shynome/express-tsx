@@ -5,6 +5,7 @@ static/require.config.tsx
 
 #test file
 __test*
+example
 
 # Logs
 logs
