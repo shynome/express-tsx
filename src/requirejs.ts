@@ -2,7 +2,7 @@ import fs = require('fs')
 import { compile } from "./Compile";
 import { join } from "path"; 
 // join compile files
-export let requirejsConfigPath = compile.files[join(__dirname,'../static/require.config.tsx')].filename
+export let requirejsConfigPath = compile.scriptVersion[join(__dirname,'../static/require.config.tsx')].filename
 export let requirejsUrl = ''
 export const requirejs:Require = require('requirejs')
 // proxy reuqirejs config

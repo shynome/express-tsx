@@ -6,7 +6,7 @@ import { config } from "../";
 import { push } from "./";
 import { compile } from "./Compile";
 import { join } from "path";
-export const bowerRenderScript = compile.files[join(__dirname,'../static/bowerRender.tsx')].filename
+export const bowerRenderScript = compile.scriptVersion[join(__dirname,'../static/bowerRender.tsx')].filename
 export const wrap:ssrWrap = function( body, ViewData, file, data  ){
     ViewData = new config(ViewData)
 let { imports, pushEtag } = push(file, data, ViewData, [ requirejsConfigPath, bowerRenderScript, ])

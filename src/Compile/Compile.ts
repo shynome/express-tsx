@@ -31,7 +31,7 @@ export class Compile {
     configExtend(this.compilerOptions,Compile.defaultCompilerOptions,options)
     this.service = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
-      getScriptFileNames:()=>Object.keys(this.files),
+      getScriptFileNames:()=>Object.keys(this.scriptVersion),
       getScriptVersion:this.getScriptVersion,
       getScriptSnapshot:(file)=>!fs.existsSync(file)?undefined:ts.ScriptSnapshot.fromString(fs.readFileSync(file).toString()),
       getCurrentDirectory:()=>rootDir,
@@ -39,33 +39,46 @@ export class Compile {
     })
     this.FSWatch = chokidar.watch(rootDir,{ ignored:/\.git/ })
       .on('change',this.updateFilesShot)
+    //try to read last saved scriptVersion
+    try{
+      Object.assign(this.filesVersion, require(this.filesVersionSavePath))
+    }catch(err){
+      //maybe json error or file not exist
+    }
   }
   FSWatch:chokidar.FSWatcher
   updateFilesShot = (file)=>{
     file = Compile.normalize(file)
-    if(!Reflect.has(this.files,file)){
+    if(!Reflect.has(this.scriptVersion,file)){
       return
     }
-    let shot = this.files[file]
+    let shot = this.scriptVersion[file]
     shot.version = (Number(shot.version) + 1).toString()
     shot.expired = true
+    this.saveScriptVersion()
   }
   service:ts.LanguageService
   static normalize = (f:string)=>f.replace(/\\/g,'/')
     //One Drive letter has two cases ( E: or e:)
     .split(':').map((drive,index)=>index?drive:drive.toLowerCase()).join(':')
-  getScriptVersion = (file:string)=>this.files[file].version
-  files = new Proxy<{[key:string]:Shot}>({},{
-    get(target,filename:string){
+  getScriptVersion = (file:string)=>this.scriptVersion[file].version
+  filesVersionSavePath = path.join(__dirname,'../../static/filesVersion.json')
+  filesVersion = {}
+  saveScriptVersion = ()=>{
+    fs.writeFileSync(this.filesVersionSavePath,JSON.stringify(this.filesVersion))
+  }
+  scriptVersion = new Proxy<{[key:string]:Shot}>(this.filesVersion,{
+    get:(target,filename:string)=>{
       filename = Compile.normalize(filename) //路径标准化
       if(!target[filename]){
         target[filename] = new Shot(filename)
+        this.saveScriptVersion()
       }
       return target[filename]
     },
   })
   getAllImports = (file:string):string[]=>{
-    file = this.files[file].filename 
+    file = this.scriptVersion[file].filename 
     let resolvedModules:any[] = (this.service.getProgram().getSourceFile(file) as any).resolvedModules // typescript 没有公开的属性
     let modules:string[] = []
     if(resolvedModules){
