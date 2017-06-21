@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "3.1.16",
+  "version": "3.1.17",
   "description": "express render tsx",
   "main": "lib/index.js",
   "types": "src/index.ts",
@@ -18,7 +18,7 @@
   "peerDependencies": {
     "react": "^15.4.2",
     "express": "^4.15.2",
-    "typescript": "^2.4.0",
+    "typescript": "^2.3.4",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
@@ -38,10 +38,10 @@
     "require-dynamic-exec": "^1.1.64",
     "spdy": "^3.4.4",
     "ts-node": "^3.0.2",
-    "typescript": "^2.4.0"
+    "typescript": "^2.3.4"
   },
   "scripts": {
-    "prepublish": "gulp tsc",
+    "prepare": "gulp tsc",
     "start": "npm run test",
     "test": "node example/ts.js"
   },

@@ -51,7 +51,6 @@ export class Compile {
     }
     let shot = this.scriptVersion[file]
     shot.version = Shot.getHash(file)
-    debugger
     shot.expired = true
   }
   service:ts.LanguageService
