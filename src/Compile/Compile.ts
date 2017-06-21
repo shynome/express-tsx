@@ -1,6 +1,7 @@
 import ts = require('typescript')
 import path = require('path')
 import fs = require('fs')
+import crypto = require('crypto')
 import configExtend = require('config-extend')
 import chokidar = require('chokidar')
 
@@ -14,9 +15,11 @@ export let defaultCompilerOptions:ts.CompilerOptions = {
 export class Shot {
   constructor(file){
     this.filename = file
+    this.version = Shot.getHash(file)
   }
   filename?:string
-  version:string = '1'
+  version:string
+  static getHash = (file)=>crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
   outputFile:string
   expired:boolean = true
   /**cache import files */
@@ -39,12 +42,6 @@ export class Compile {
     })
     this.FSWatch = chokidar.watch(rootDir,{ ignored:/\.git/ })
       .on('change',this.updateFilesShot)
-    //try to read last saved scriptVersion
-    try{
-      Object.assign(this.filesVersion, require(this.filesVersionSavePath))
-    }catch(err){
-      //maybe json error or file not exist
-    }
   }
   FSWatch:chokidar.FSWatcher
   updateFilesShot = (file)=>{
@@ -53,26 +50,21 @@ export class Compile {
       return
     }
     let shot = this.scriptVersion[file]
-    shot.version = (Number(shot.version) + 1).toString()
+    shot.version = Shot.getHash(file)
+    debugger
     shot.expired = true
-    this.saveScriptVersion()
   }
   service:ts.LanguageService
   static normalize = (f:string)=>f.replace(/\\/g,'/')
     //One Drive letter has two cases ( E: or e:)
     .split(':').map((drive,index)=>index?drive:drive.toLowerCase()).join(':')
   getScriptVersion = (file:string)=>this.scriptVersion[file].version
-  filesVersionSavePath = path.join(__dirname,'../../static/filesVersion.json')
   filesVersion = {}
-  saveScriptVersion = ()=>{
-    fs.writeFileSync(this.filesVersionSavePath,JSON.stringify(this.filesVersion))
-  }
   scriptVersion = new Proxy<{[key:string]:Shot}>(this.filesVersion,{
     get:(target,filename:string)=>{
       filename = Compile.normalize(filename) //路径标准化
       if(!target[filename]){
         target[filename] = new Shot(filename)
-        this.saveScriptVersion()
       }
       return target[filename]
     },
