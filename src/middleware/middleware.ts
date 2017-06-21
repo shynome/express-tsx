@@ -30,7 +30,6 @@ import { etag } from "./push";
 import { parse } from "url";
 middleware.use(basePath,function(req,res){
   res.type('js')
-  res.setHeader('cache-control','max-age='+maxAge)
   let module = decodeURI(parse(req.url).pathname).slice(1)
   let isLoadMap = module.slice(-4) === '.map'
       module = module.replace(/\.(tsx|ts|js|jsx)(\.map|)$/,'')
@@ -40,10 +39,10 @@ middleware.use(basePath,function(req,res){
     res.status(404).end(`Not found`)
     break
   // case Reflect.has(compile.files,moduleTry=module):
-  case Reflect.has(compile.files,moduleTry=module+'.tsx'):
-  case Reflect.has(compile.files,moduleTry=module+'.ts'):
-  case Reflect.has(compile.files,moduleTry=module+'.jsx'):
-  case Reflect.has(compile.files,moduleTry=module+'.js'):
+  case Reflect.has(compile.scriptVersion,moduleTry=module+'.tsx'):
+  case Reflect.has(compile.scriptVersion,moduleTry=module+'.ts'):
+  case Reflect.has(compile.scriptVersion,moduleTry=module+'.jsx'):
+  case Reflect.has(compile.scriptVersion,moduleTry=module+'.js'):
     let tag = etag(moduleTry)
     if( tag === req.header('if-none-match') ){
       res.status(304)
@@ -57,6 +56,7 @@ middleware.use(basePath,function(req,res){
         res.sendFile(moduleTry)
         return
       }else{
+        res.setHeader('cache-control','max-age='+maxAge)
         body = compile.getCompiledCode(moduleTry).text
       }
       res.send(body)
