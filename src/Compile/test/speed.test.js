@@ -3,7 +3,7 @@ const path = require('path')
 require('ts-node').register({ fast:true, project:cwd })
 const file = path.join(cwd,'views/ssrRender.tsx')
 const file2 = path.join(cwd,'views/deep1.tsx')
-const { Compile } = require('./Compile')
+const { Compile } = require('../')
 let c = new Compile()
 
 c.getImports(file)
