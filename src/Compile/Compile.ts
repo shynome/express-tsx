@@ -68,19 +68,21 @@ export class Compile {
       return target[filename]
     },
   })
-  getAllImports = (file:string):string[]=>{
-    file = this.scriptVersion[file].filename 
+  getAllImports = (file:string,imports=[]):string[]=>{
+    let newImports = [file].concat(this.getOneFileImports(file)).filter(m=>imports.indexOf(m)===-1)
+    return !newImports.length
+      ? imports
+      : newImports.reduce((t,p)=>this.getAllImports(p,t),imports.concat(newImports))
+  }
+  getOneFileImports = (file:string)=>{
     let resolvedModules:any[] = (this.service.getProgram().getSourceFile(file) as any).resolvedModules // typescript 没有公开的属性
-    let modules:string[] = []
-    if(resolvedModules){
-      modules = 
-        Array.from(resolvedModules.values()) 
+    return resolvedModules 
+      ? Array.from(resolvedModules.values())
         .filter(a=>a) //filter void
         .map<string>((a:any)=>a.resolvedFileName) 
-    }
-    return modules.reduce( (p,v)=>p.concat(this.getAllImports(v)), [file] )
+      : []
   }
-  getImports = (file:string)=>this.getAllImports(file).filter(m=>!(/node_modules/.test(m)))
+  getImports = (file:string)=>this.getAllImports(this.scriptVersion[file].filename).filter(m=>!(/node_modules/.test(m)))
   compile = (filename:string)=>this.service.getEmitOutput(filename)
   getCompiledCode = (filename:string)=>this.compile(filename).outputFiles.slice(-1)[0]
   getSourceMap = (filename:string)=>this.compile(filename).outputFiles[0]
