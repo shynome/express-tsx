@@ -4,6 +4,11 @@
         "target": "es6",
         "noImplicitAny": false,
         "jsx": "react",
+        "lib": [
+            "es2017",
+            "dom",
+            "webworker"
+        ],
         "sourceMap": true
     }
 }

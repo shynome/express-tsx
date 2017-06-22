@@ -5,6 +5,9 @@ export const app = Router()
 import { middleware } from "../src";
 app.use(middleware)
 
+import { app as sw } from './sw'
+app.use('/sw',sw)
+
 import { app as staticHTMLRender } from "./staticHTMLRender";
 app.use('/staticHTMLRender',staticHTMLRender)
 
