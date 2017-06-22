@@ -1,14 +1,16 @@
 # Change Log
 
-## [bug]
-- 获取视图文件依赖时:两个文件互相引用会出现内存溢出
 
 ## [future]
-- `manifest` 离线可用支持
-- ts2.4 `import()` 异步加载兼容
+- ts2.4 `import()` 异步加载兼容 , 会被提前推送
 - `heroku` 兼容
 
-## [3.1.17] - 2017-6-15
+## [3.1.18] - 2017-6-23
+### fixed bug 
+- `bug` : 获取文件依赖时:两个文件互相引用会出现内存溢出
+- `typescript` 版本回退 
+
+## [3.1.17] - 2017-6-21
 ### change
 - `fileVersion` 现在使用 `hash` 值表示一致
 - `typescript` 版本回退 
