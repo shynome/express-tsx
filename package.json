@@ -22,7 +22,6 @@
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
-    "chokidar": "^1.7.0",
     "@types/chokidar": "^1.6.0",
     "@types/express": "^4.0.35",
     "@types/node": "^7.0.12",
