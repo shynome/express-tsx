@@ -2,16 +2,22 @@
 # 介绍
 这是 express 中 jsx 模板渲染的一个实现 .
 
+# 安装
+
+```shell
+npm install express-tsx chokidar
+```
+_`chokidar`是开发依赖 , 生产环境不会安装_
+
 # 使用
 
 [app 主文件](./example/ssrRender.ts)
 ```typescript
 
-
 import Express = require('express')
 export const app = Express()
 
-import { render,requirejsConfig,defaultOptions,middleware } from "../src";
+import { render,requirejsConfig,defaultOptions,middleware } from "expres-tsx";
 
 app.use(middleware) // important !!! 你需要在渲染页面之前注入这个中间件 , 这个中间会使用 '/express-tsx' 路径 , 不能覆盖该路径
 
@@ -28,7 +34,6 @@ requirejsConfig({
 })
 
 app.engine('.tsx',render({
-  ssr:false, //推荐关闭
   // ssrRender,
   // ssrWrap, //这个是核心 , 不建议替换
   // placeholder:'loading', //你可以在这里放个 loading 动画
@@ -69,5 +74,5 @@ export default (props)=>
   npm test
   ```
   ps: 如果你使用 vscode 的话 , 你可以直接 f5 运行
-- 在浏览器中打开 [示例:https://lo.shynome.com:443/](https://lo.shynome.com:443/)
+- 在浏览器中打开 [示例:https://lo.shynome.com:443/](https://lo.shynome.com:443/) | [示例:http://127.0.0.1:3000/](http://127.0.0.1:3000/)
 -  最后 , 如果有好的建议欢迎提 issue | pr 哦 !

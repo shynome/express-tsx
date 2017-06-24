@@ -3,7 +3,7 @@ import path = require('path')
 import fs = require('fs')
 import crypto = require('crypto')
 import configExtend = require('config-extend')
-import chokidar = require('chokidar')
+import { FSWatcher } from 'chokidar'
 
 export let defaultCompilerOptions:ts.CompilerOptions = {
   module:ts.ModuleKind.AMD,
@@ -40,11 +40,16 @@ export class Compile {
       getCurrentDirectory:()=>rootDir,
       getDefaultLibFileName:(options)=>ts.getDefaultLibFilePath(options)
     })
-    this.FSWatch = chokidar.watch(rootDir,{ ignored:/\.git/ })
-      .on('change',this.updateFilesShot)
+    if(
+      !/production/i.test(process.env.NODE_ENV) //only watch on dev
+    ){
+      this.FSWatch = require('chokidar').watch(rootDir,{ ignored:/\.git/ })
+        .on('change',this.updateFilesShot)
+    }
   }
-  FSWatch:chokidar.FSWatcher
+  FSWatch:FSWatcher
   updateFilesShot = (file)=>{
+    debugger
     file = Compile.normalize(file)
     if(!Reflect.has(this.scriptVersion,file)){
       return
