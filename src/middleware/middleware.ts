@@ -25,12 +25,15 @@ middleware.use(function(req,res,next){
   next()
 })
 export const basePath = '/express-tsx'
+export const filePathMatch = new RegExp(`${basePath}\/(.+)$`)
 export let maxAge = 60*60*12
 import { etag } from "./push";
 import { parse } from "url";
 middleware.use(basePath,function(req,res){
   res.type('js')
-  let module = decodeURI(parse(req.url).pathname).slice(1)
+  let pathname = parse(req.originalUrl).pathname
+  let match = decodeURI(pathname).match(filePathMatch)
+  let module = match === null ? '' : match[1]
   let isLoadMap = module.slice(-4) === '.map'
       module = module.replace(/\.(tsx|ts|js|jsx)(\.map|)$/,'')
   let moduleTry:string
