@@ -49,7 +49,6 @@ export class Compile {
   }
   FSWatch:FSWatcher
   updateFilesShot = (file)=>{
-    debugger
     file = Compile.normalize(file)
     if(!Reflect.has(this.scriptVersion,file)){
       return
