@@ -8,9 +8,6 @@
         "outDir": "lib"
     },
     "exclude": [
-        "**/*.test.*"
-    ],
-    "include": [
-        "src"
+        "test"
     ]
 }
