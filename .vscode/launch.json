@@ -7,18 +7,33 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "服务测试",
-      "program": "${workspaceRoot}/example/ts.js",
-      "cwd": "${workspaceRoot}",
-      "protocol": "inspector"
+      "name": "Mocha Tests",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceRoot}/test"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "代码测试",
-      "program": "${file}",
-      "cwd": "${workspaceRoot}/example",      
-      "protocol": "inspector"
+      "name": "Compiler Tests",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceRoot}/test/compiler"
+      ],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }

@@ -5,51 +5,19 @@
   "main": "lib/index.js",
   "types": "src/index.ts",
   "dependencies": {
-    "config-extend": "^0.1.1",
-    "lodash": "^4.17.4",
-    "requirejs": "^2.3.3"
   },
   "peerDependencies": {
-    "react": "^15.4.2",
-    "express": "^4.15.2",
-    "typescript": "^2.3.4",
-    "react-dom": "^15.4.2"
   },
   "devDependencies": {
-    "@types/chokidar": "^1.6.0",
-    "@types/express": "^4.0.35",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.12",
-    "@types/react": "^15.0.24",
-    "@types/react-dom": "^0.14.23",
-    "@types/requirejs": "^2.1.29",
-    "@types/spdy": "^3.4.1",
-    "express": "^4.15.2",
-    "glamor": "^2.20.25",
-    "glamorous": "^3.23.0",
-    "gulp": "^3.9.1",
-    "mocha": "^3.4.2",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "require-dynamic-exec": "^1.1.64",
-    "spdy": "^3.4.4",
-    "ts-node": "^3.0.2",
-    "typescript": "^2.4.1"
   },
   "scripts": {
-    "test":"mocha test",
-    "build":"gulp build",
-    "postbuild":"npm run test",
+    "test": "mocha test",
+    "build": "gulp build",
+    "postbuild": "npm run test",
     "prepublishOnly": "npm run build",
-    "start": "npm run test",
+    "start": "npm run test"
   },
   "keywords": [
-    "express",
-    "tsx",
-    "jsx",
-    "render",
-    "view",
-    "react"
   ],
   "author": "shynome",
   "license": "MIT",
