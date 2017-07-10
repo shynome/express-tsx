@@ -2,13 +2,20 @@
   "name": "express-tsx",
   "version": "3.1.23",
   "description": "express render tsx",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "typescript": "^2.4.1"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "@types/react": "^15.0.35",
+    "@types/react-dom": "^15.5.1",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.2.0"
   },
   "scripts": {
     "test": "mocha test",
@@ -17,8 +24,7 @@
     "prepublishOnly": "npm run build",
     "start": "npm run test"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "shynome",
   "license": "MIT",
   "repository": {

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "sourceMap": true,
+    "jsx": "react",
+    "moduleResolution": "classic",
+    "outDir": "../dist"
+  }
+}

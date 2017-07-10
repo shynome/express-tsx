@@ -4,9 +4,7 @@
     "target": "es6",
     "noImplicitAny": false,
     "sourceMap": true,
-    "moduleResolution": "node",
-    "jsx": "react",
-    "outDir": "lib"
+    "outDir": "dist"
   },
   "exclude": [
     "test"
