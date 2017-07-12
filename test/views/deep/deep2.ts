@@ -1,0 +1,1 @@
+export let deep2 = 'deep2'

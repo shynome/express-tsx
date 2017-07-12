@@ -4,9 +4,6 @@
     "target": "es6",
     "noImplicitAny": false,
     "sourceMap": true,
-    "outDir": "dist"
-  },
-  "exclude": [
-    "test"
-  ]
+    "jsx": "react"
+  }
 }

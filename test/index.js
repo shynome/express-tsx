@@ -1,2 +1,2 @@
-require('ts-node').register({ fast:true, project:__dirname })
-require('./view')
+require('./ts')
+// require('./view')
