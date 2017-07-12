@@ -1,4 +1,8 @@
 
+
+## future
+- 支持 typescript 2.4.1
+
 # 介绍
 这是 express 中 jsx 模板渲染的一个实现 .
 
