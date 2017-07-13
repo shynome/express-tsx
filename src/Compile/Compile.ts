@@ -43,7 +43,7 @@ export class Compile {
     }
     return md5
   }
-  constructor(compilerOptions:ts.CompilerOptions={}){
+  init = (compilerOptions:ts.CompilerOptions)=>{
     if(compilerOptions.project){
       this.project = compilerOptions.project
     }
@@ -57,6 +57,9 @@ export class Compile {
       console.warn(err)
     }
     this.compilerOptions = { ...this.compilerOptions, ...Compile.defaultCompilerOptions, ...compilerOptions, }
+  }
+  constructor(compilerOptions:ts.CompilerOptions={}){
+    this.init(compilerOptions)
     this.server = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
       getScriptFileNames:()=>Object.keys(this.hash),
