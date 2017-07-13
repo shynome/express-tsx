@@ -27,8 +27,11 @@ return `
     var imports = /* ['s']// */${JSON.stringify(imports)}
         imports = imports.map(function(path){ return '/express-tsx/'+path })
     var map = imports.reduce(function(target,module){
-      var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)
+      var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
       target[name] = module
+      if(/\\\/index$/.test(name)){
+        target[name.replace(/\\\/index$/,'')] = module        
+      }
       return target
     },{})
     var b = imports.reduce(function(target,module){
