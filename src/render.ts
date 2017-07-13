@@ -6,6 +6,18 @@ renderMiddleware.use((req,res,next)=>{
   res.locals.res = res
   next()
 })
+import { compiler,Compile } from "./Compile";
+declare global {
+  namespace Express {
+    export interface Application {
+      compiler:Compile
+    }
+  }
+}
+renderMiddleware.use((req,res,next)=>{
+  res.app.compiler = compiler
+  next()
+})
 export class ServerData {
   //express-tsx addon
   callback:string|undefined = null
@@ -41,7 +53,12 @@ export const render:ViewEngine = async(file,data,next)=>(async(file,data):Promis
     if( !callback.length ){ return json }
     return `${callback}(${json})`
   }
-  return html(file,data)
+  let compiler = data.res.app.compiler
+  compiler.getScriptVersion(file)
+  let imports = compiler.getImportsWithoutTypes(file)
+      imports = imports.map((module)=>module+'?v='+compiler.getScriptVersion(module))
+      
+  return html(file,data,imports)
 })(file,data).then(
   (res)=>next(null,res),
   (err)=>next(err),
