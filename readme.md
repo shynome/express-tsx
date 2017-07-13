@@ -1,7 +1,7 @@
 
 
-## future
-- 支持 typescript 2.4.1
+## 警告
+- 当前版本不支持 typescript 2.4.1 
 
 # 介绍
 这是 express 中 jsx 模板渲染的一个实现 .
@@ -9,9 +9,8 @@
 # 安装
 
 ```shell
-npm install express-tsx chokidar
+npm install express-tsx typescript
 ```
-_`chokidar`是开发依赖 , 生产环境不会安装_
 
 # 使用
 
