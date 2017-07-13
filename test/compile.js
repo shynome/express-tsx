@@ -90,7 +90,7 @@ describe('Compile test',()=>{
     compiler.compilerOptions.sourceMap = false
     let sourceMap2 = compiler.getSourceMap(file)
     assert(
-      !sourceMap2
+      sourceMap2 === 'no sourceMap'
       ,
       `that should not has sourcemap , please check Compile compilerOptions`
     )
