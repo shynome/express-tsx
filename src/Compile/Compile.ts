@@ -101,9 +101,10 @@ export class Compile {
   }
   static regx = {
     sourceMap:/\.js\.map$/,
-    exts:/\.(ts(x|)|js(x|))$/
+    exts:/\.(ts(x|)|js(x|))$/,
+    isLinux:/^\/([^:]+)\//,
   }
-  pathMapToFile = (module:string,tryExts?:string[]):string=>{
+  pathMapToFile = (module:string):string=>{
     let file:string = module
     switch(true){
     case !!(file = this.__pathMapToFile(module)):
@@ -122,10 +123,10 @@ export class Compile {
   }
   jsExpiredTime:number =15*1*24*60*60
   staticServer:RequestHandler = async(req,res)=>{
-    let url = Url.parse(req.originalUrl)
+    let url = Url.parse(req.url)
     let regx = Compile.regx
     let { pathname, query={} } = url
-    let path:string = pathname.slice(req.baseUrl.length+1)
+    let path:string = pathname.slice(regx.isLinux.test(pathname)?0:1)
     let isRequestSourceMap = regx.sourceMap.test(path)
     if( isRequestSourceMap ){ path = path.replace(regx.sourceMap,'') }
     let module = path.replace(Compile.regx.exts,'')
