@@ -20,16 +20,15 @@ export class Compile {
   parseImports = (file,code:string):string[]=>{
     let imports:string[] = []
     imports = ts.preProcessFile(code).importedFiles.map(({ fileName })=>fileName )
-    .map(
-      (module)=>{
-        let resolvedModule = ts.resolveModuleName(module,file,this.compilerOptions,sys).resolvedModule
-        return resolvedModule && resolvedModule.resolvedFileName
-      }
-    )
+    .map( (module)=>this.resolveModule(module,file) )
     .filter(v=>v)
     .filter(file=>!Reflect.has(this.hash,file))
     imports.forEach(this.updateScriptVersion)
     return imports
+  }
+  resolveModule = (module:string,file='')=>{
+    let resolvedModule = ts.resolveModuleName(module,file,this.compilerOptions,sys).resolvedModule
+    return resolvedModule && resolvedModule.resolvedFileName
   }
   updateScriptVersion = (file)=>{
     let code = sys.readFile(file)
