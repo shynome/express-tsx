@@ -12,7 +12,8 @@ server.use(middleware)
 server.engine('.tsx',render)
 server.set('views',__dirname)
 server.set('view engine','tsx')
-server.use('/',(req,res)=>res.render('./views/index.tsx',{ hello:'string' }))
+server.use(/\/$/,(req,res)=>res.render('./views/index.tsx',{ hello:'string' }))
+server.use('/view2',(req,res)=>res.render('./views/view2.tsx',{ hello:'string' }))
 
 describe('render test',()=>{
   it('render view',async()=>{

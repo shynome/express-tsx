@@ -74,7 +74,7 @@ describe('import test',()=>{
 })
 describe('Compile test',()=>{
 
-  const file = require.resolve('./views')
+  const file = require.resolve('./views/importDeep.ts')
   compiler.getScriptVersion(file)
   
   it('getSourceMap',async()=>{

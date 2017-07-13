@@ -24,8 +24,8 @@ return `
   <script>var requirejs = ${getRequirejsConfig()}</script>
   <script src="${requirejs.toUrl('requirejs')}"></script>
   <script>
-    var imports = /* ['s']// */${JSON.stringify(imports)}
-        imports = imports.map(function(path){ return '/express-tsx/'+path })
+    var imports = ${JSON.stringify(imports)}
+        imports = imports.map(function(path){ return '/express-tsx/'+path })//.map(function(path){ return path.replace(/\\\.(ts(x|)|js(x|))\\\?/,'?') })
     var map = imports.reduce(function(target,module){
       var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
       target[name] = module
