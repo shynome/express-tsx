@@ -118,7 +118,7 @@ export class Compile {
     if( !tryExts[0] ){ return undefined }
     return Reflect.has(this.hash,file=module+'.'+tryExts[0])
       ? file
-      : this.pathMapToFile(module,tryExts.slice(1))
+      : this.__pathMapToFile(module,tryExts.slice(1))
   }
   jsExpiredTime:number =15*1*24*60*60
   staticServer:RequestHandler = async(req,res)=>{
