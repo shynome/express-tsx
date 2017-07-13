@@ -104,7 +104,17 @@ export class Compile {
     sourceMap:/\.js\.map$/,
     exts:/\.(ts(x|)|js(x|))$/
   }
-  pathMapToFile = (module:string,tryExts:string[]=['tsx','ts','jsx','js','']):string|undefined=>{
+  pathMapToFile = (module:string,tryExts?:string[]):string=>{
+    let file:string = module
+    switch(true){
+    case !!(file = this.__pathMapToFile(module)):
+    case !!(file = this.__pathMapToFile(module+'/index')):
+      return file
+    default:
+      return undefined
+    }
+  }
+  private __pathMapToFile = (module:string,tryExts:string[]=['tsx','ts','jsx','js','']):string|undefined=>{
     let file:string
     if( !tryExts[0] ){ return undefined }
     return Reflect.has(this.hash,file=module+'.'+tryExts[0])
@@ -122,15 +132,7 @@ export class Compile {
     let module = path.replace(Compile.regx.exts,'')
     let file:string
     if( !(file = this.pathMapToFile(module)) ){
-      module += '/index'
-      if( !(file = this.pathMapToFile(module)) ){
-        return res.status(404).end(`not found`)
-      }else{
-        url.pathname = req.baseUrl+'/'+file
-        url.query = { v:this.getScriptVersion(file) }
-        res.redirect(Url.format(url))
-      }
-      return
+      return res.status(404).end(`not found`)
     }
     let body:string = ''
     switch(true){
