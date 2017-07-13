@@ -17,14 +17,14 @@ export class Compile {
   }
   project:string = sys.getCurrentDirectory()
   hash:{[filename:string]:string} = {}
-  parseImports = (file,code:string):string[]=>{
-    let imports:string[] = []
-    imports = ts.preProcessFile(code).importedFiles.map(({ fileName })=>fileName )
-    .map( (module)=>this.resolveModule(module,file) )
-    .filter(v=>v)
-    .filter(file=>!Reflect.has(this.hash,file))
-    imports.forEach(this.updateScriptVersion)
-    return imports
+  resolveModuleNames=(moduleNames:string[],containingFile:string)=>{
+    return moduleNames.map((module)=>{
+      let resolvedModule = ts.resolveModuleName(module,containingFile,this.compilerOptions,sys).resolvedModule
+      if(resolvedModule && resolvedModule.resolvedFileName){
+        this.getScriptVersion(resolvedModule.resolvedFileName)
+      }
+      return resolvedModule
+    })
   }
   resolveModule = (module:string,file='')=>{
     let resolvedModule = ts.resolveModuleName(module,file,this.compilerOptions,sys).resolvedModule
@@ -32,9 +32,7 @@ export class Compile {
   }
   updateScriptVersion = (file)=>{
     let code = sys.readFile(file)
-    let md5 = this.hash[file] = sys.createHash(code)
-    this.parseImports(file,code)
-    return md5
+    return this.hash[file] = sys.createHash(code)
   }
   getScriptVersion = (file)=>{
     file = sys.resolvePath(file)
@@ -68,6 +66,7 @@ export class Compile {
       getScriptSnapshot:(file)=>sys.fileExists(file) ? ts.ScriptSnapshot.fromString(sys.readFile(file)) : undefined,
       getCurrentDirectory:()=>this.project,
       getDefaultLibFileName:(options)=>ts.getDefaultLibFileName(options),
+      resolveModuleNames:(moduleNames,containingFile)=>this.resolveModuleNames(moduleNames,containingFile),
     })
   }
   getFileImports = (file,program=this.server.getProgram())=>{
