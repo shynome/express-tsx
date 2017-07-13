@@ -105,10 +105,10 @@ export class Compile {
     sourceMap:/\.js\.map$/,
     replace:/\.(ts(x|)|js(x|))$/
   }
-  pathMapToFile = (module:string,tryExts:string[]=['.tsx','ts','jsx','js','']):string|undefined=>{
+  pathMapToFile = (module:string,tryExts:string[]=['tsx','ts','jsx','js','']):string|undefined=>{
     let file:string
     if( !tryExts[0] ){ return undefined }
-    return Reflect.has(this.hash,file=module+tryExts[0])
+    return Reflect.has(this.hash,file=module+'.'+tryExts[0])
       ? file
       : this.pathMapToFile(module,tryExts.slice(1))
   }
