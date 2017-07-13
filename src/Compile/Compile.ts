@@ -102,7 +102,7 @@ export class Compile {
   }
   static regx = {
     sourceMap:/\.js\.map$/,
-    replace:/\.(ts(x|)|js(x|))$/
+    exts:/\.(ts(x|)|js(x|))$/
   }
   pathMapToFile = (module:string,tryExts:string[]=['tsx','ts','jsx','js','']):string|undefined=>{
     let file:string
@@ -119,9 +119,19 @@ export class Compile {
     let path:string = pathname.slice(req.baseUrl.length+1)
     let isRequestSourceMap = regx.sourceMap.test(path)
     if( isRequestSourceMap ){ path = path.replace(regx.sourceMap,'') }
-    let module = path.replace(Compile.regx.replace,'')
+    let module = path.replace(Compile.regx.exts,'')
     let file:string
-    if( !(file = this.pathMapToFile(module)) ){ return res.status(404).end(`not found`) }
+    if( !(file = this.pathMapToFile(module)) ){
+      module += '/index'
+      if( !(file = this.pathMapToFile(module)) ){
+        return res.status(404).end(`not found`)
+      }else{
+        url.pathname = req.baseUrl+'/'+file
+        url.query = { v:this.getScriptVersion(file) }
+        res.redirect(Url.format(url))
+      }
+      return
+    }
     let body:string = ''
     switch(true){
       case isRequestSourceMap:
