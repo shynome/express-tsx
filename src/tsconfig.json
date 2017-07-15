@@ -4,6 +4,10 @@
     "target": "es6",
     "noImplicitAny": false,
     "sourceMap": true,
+    "lib": [
+      "es2016",
+      "dom"
+    ],
     "outDir": "../dist"
   }
 }
