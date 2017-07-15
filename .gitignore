@@ -1,6 +1,7 @@
 
 #dist file
 dist
+static/requirejs.browser.config.ts
 
 # Logs
 logs
