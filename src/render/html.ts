@@ -2,8 +2,8 @@ import requirejs = require('requirejs')
 import { data,ViewData } from "./render";
 import { preload } from './preload'
 import path = require('path')
-export const browserInitPath = path.join(__dirname,'./browser.init.ts')
-export const requirejsConfigPath = path.join(__dirname,'./requirejs.browser.config.ts')
+export const browserInitPath = path.join(__dirname,'../../static/browser.init.ts')
+export const requirejsConfigPath = path.join(__dirname,'../../static/requirejs.browser.config.ts')
 export let html = async(file:string,data:data,view_data:ViewData):Promise<string>=>{
   let compiler = data.res.app.compiler
       compiler.getScriptVersion(file)//compile entry file
