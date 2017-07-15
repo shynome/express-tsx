@@ -15,20 +15,20 @@ npm install express-tsx typescript --save
 //创建 express 服务
 const express = require('express')
 const server = express()
-server.listen(9000,function(){ console.log(`server is running on ${this.addresss().port}`) })
+server.listen(9000,function(){ console.log(`server is running on ${this.address().port}`) })
 //设定视图引擎
-server.engie('.tsx',require('express-tsx').render)
+server.engine('.tsx',require('express-tsx').render)
 server.set('views',__dirname)
 server.set('view engie','tsx')//选择视图引擎
 //**注意**:在渲染视图前需要根路由注入中间件
 server.use(require('express-tsx').middleware)
 //渲染视图
-server.ues('/',(req,res)=>res.render('./view.tsx'))
+server.use('/',(req,res)=>res.render('./view.tsx'))
 ```
 - [视图文件](./example/view.tsx)
 ```jsx typescript
 import React = require('react')
-alert('express-tsx' as any)
+console.log('express-tsx' as any)
 export default ()=>
 <div>
   hello world
@@ -40,17 +40,9 @@ export default ()=>
   ```shell
   git clone https://github.com/shynome/express-tsx.git
   ```
-- 安装依赖
-  ```shell 
-  npm install
-  ```
-- 进入示例目录
+- 安装依赖 ; 进入示例目录 ; 运行
   ```shell
-  cd example
-  ```
-- 运行
-  ```shell
-  npm start
+  cd example ; npm install ; npm start
   ```
 - 在浏览器中打开 [示例:http://127.0.0.1:9000/](http://127.0.0.1:9000/)  
   一切正常的话会看到 : `hello world`
