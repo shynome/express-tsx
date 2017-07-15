@@ -1,4 +1,3 @@
 
-export { Compile } from './Compile'
-export { middleware } from './middleware'
-export { render } from './render'
+export * from './Compile'
+export * from './render'
