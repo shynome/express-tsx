@@ -100,10 +100,7 @@ export class Compile {
     }
     return false
   }
-  getImportsWithoutTypes = (file:string)=>{
-    debugger
-    return this.getImports(file).filter((file)=>!Compile.ignore(file))
-  }
+  getImportsWithoutTypes = (file:string)=>this.getImports(file).filter((file)=>!Compile.ignore(file))
   getEmitOutput = (file)=>this.server.getEmitOutput(file)
   getSourceCode = (file)=>this.server.getProgram().getSourceFile(file).text
   getCompiledCode = (file)=>{
