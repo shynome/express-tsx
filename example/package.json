@@ -7,5 +7,8 @@
     "express": "latest",
     "express-tsx": "beta",
     "typescript": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "^15.0.38"
   }
 }
