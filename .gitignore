@@ -2,10 +2,6 @@
 #dist file
 dist
 
-#test file
-__test*
-example
-
 # Logs
 logs
 *.log
