@@ -1,15 +1,13 @@
 {
   "name": "express-tsx",
   "version": "3.1.23",
-  "description": "express render tsx",
+  "description": "express view engine",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "dependencies": {
     "requirejs": "^2.3.3"
   },
   "peerDependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
     "express": "^4.15.3",
     "typescript": "^2.4.1"
   },
@@ -23,8 +21,6 @@
     "gulp": "^3.9.1",
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
     "ts-node": "^3.2.0",
     "typescript": "^2.4.1"
   },
@@ -35,7 +31,14 @@
     "prepublishOnly": "npm run build",
     "start": "npm run test"
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "view",
+    "engine",
+    "tsx",
+    "typescriptreact",
+    "react"
+  ],
   "author": "shynome",
   "license": "MIT",
   "repository": {
