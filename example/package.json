@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "express": "latest",
-    "express-tsx": "latest",
+    "express-tsx": "beta",
     "typescript": "latest"
   }
 }
