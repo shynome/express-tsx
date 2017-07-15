@@ -90,8 +90,20 @@ export class Compile {
       ? imports
       : newImports.reduce((all,p)=>this.getImports(p,all,program),imports.concat(newImports))
   }
-  static ignore = /node_modules/
-  getImportsWithoutTypes = (file:string)=>this.getImports(file).filter((file)=>!Compile.ignore.test(file))
+  static ignore = (file)=>{
+    let result:boolean
+    if(
+        /node_modules/.test(file)
+    ||  /\.d\.ts$/.test(file)
+    ){
+      return true
+    }
+    return false
+  }
+  getImportsWithoutTypes = (file:string)=>{
+    debugger
+    return this.getImports(file).filter((file)=>!Compile.ignore(file))
+  }
   getEmitOutput = (file)=>this.server.getEmitOutput(file)
   getSourceCode = (file)=>this.server.getProgram().getSourceFile(file).text
   getCompiledCode = (file)=>{
