@@ -31,9 +31,10 @@ export class Compile {
     let resolvedModule = ts.resolveModuleName(module,file,this.compilerOptions,sys).resolvedModule
     return resolvedModule && resolvedModule.resolvedFileName
   }
+  compilerOptionsHash:string = ''
   updateScriptVersion = (file)=>{
     let code = sys.readFile(file)
-    return this.hash[file] = sys.createHash(code)
+    return this.hash[file] = sys.createHash(code+this.compilerOptionsHash)
   }
   getScriptVersion = (file)=>{
     file = sys.resolvePath(file)
@@ -58,6 +59,7 @@ export class Compile {
       console.warn(err)
     }
     this.compilerOptions = { ...this.compilerOptions, ...Compile.defaultCompilerOptions, ...compilerOptions, }
+    this.compilerOptionsHash = sys.createHash(JSON.stringify(this.compilerOptions))
   }
   constructor(compilerOptions:ts.CompilerOptions={},is_development=!(/production/i.test(process.env.NODE_ENV))){
     this.init(compilerOptions)
