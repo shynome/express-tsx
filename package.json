@@ -25,7 +25,7 @@
     "typescript": "^2.4.1"
   },
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha test/index",
     "build": "gulp build",
     "postbuild": "npm run test",
     "prepublishOnly": "npm run build",
