@@ -8,6 +8,7 @@ export class ViewData {
 export type data = ServerData & ViewData
 
 export type ViewEngine = (file:string,data:data,next:(error:Error|null,rendered?:string)=>void)=>void
+import { sys } from "typescript";
 import { html } from './'
 /**
  * you can rewrite html wrap function for your application .
@@ -20,6 +21,7 @@ export const render:ViewEngine = async(file,data,next)=>(async(file,data):Promis
     if( !callback.length ){ return json }
     return `${callback}(${json})`
   }
+  file = sys.resolvePath(file)
   return html(file,data,view_data)
 })(file,data).then(
   (res)=>next(null,res),

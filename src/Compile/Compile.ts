@@ -39,6 +39,7 @@ export class Compile {
     let md5:string = this.hash[file]
     if(!md5){
       md5 = this.updateScriptVersion(file)
+      this.is_development && sys.watchFile(file,this.watch)
     }
     return md5
   }
@@ -57,8 +58,9 @@ export class Compile {
     }
     this.compilerOptions = { ...this.compilerOptions, ...Compile.defaultCompilerOptions, ...compilerOptions, }
   }
-  constructor(compilerOptions:ts.CompilerOptions={}){
+  constructor(compilerOptions:ts.CompilerOptions={},is_development=!(/production/i.test(process.env.NODE_ENV))){
     this.init(compilerOptions)
+    this.is_development = is_development
     this.server = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
       getScriptFileNames:()=>Object.keys(this.hash),
@@ -68,6 +70,10 @@ export class Compile {
       getDefaultLibFileName:(options)=>ts.getDefaultLibFileName(options),
       resolveModuleNames:(moduleNames,containingFile)=>this.resolveModuleNames(moduleNames,containingFile),
     })
+  }
+  is_development = false
+  watch = (file)=>{
+    this.updateScriptVersion(file)
   }
   getFileImports = (file,program=this.server.getProgram())=>{
     let source = program.getSourceFile(file) as any
