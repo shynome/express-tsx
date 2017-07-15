@@ -13,6 +13,7 @@ export class Compile {
   static defaultCompilerOptions:ts.CompilerOptions = {
     target: ts.ScriptTarget.ES5,
     module:ts.ModuleKind.AMD,
+    jsx:ts.JsxEmit.React,
     moduleResolution:ts.ModuleResolutionKind.NodeJs,
   }
   project:string = sys.getCurrentDirectory()
