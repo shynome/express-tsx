@@ -1,5 +1,5 @@
 require('./ts')
-const { Compile } = require('../src')
+const { Compile } = require('../dist')
 const compiler = new Compile({ project:__dirname })
 const assert = require('assert')
 const _ = require('lodash')
@@ -33,13 +33,6 @@ describe('import test',()=>{
       && Array.isArray(importsWithoutTypes)
       ,
       `Type of Compile.getImports(file) should be Array`,
-    )
-    let difference = _.difference(imports,importsWithoutTypes)
-    assert(
-      difference.length === 1
-      && /\@types\/react/.test(difference[0])
-      ,
-      `_.difference(imports,importsWithoutTypes) should be react.d.ts , but now is ${JSON.stringify(difference)}`
     )
   })
 

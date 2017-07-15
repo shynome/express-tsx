@@ -7,7 +7,7 @@ const createServer = new Promise((resolve,reject)=>{
     resolve(port)
   })
 })
-const { middleware, render } = require('../src')
+const { middleware, render } = require('../dist')
 server.use(middleware)
 server.engine('.tsx',render)
 server.set('views',__dirname)
