@@ -81,7 +81,7 @@ export class Compile {
     if(!source.resolvedModules){
       return resolvedModules
     }
-    resolvedModules = Array.from((source.resolvedModules as Map<any,{resolvedFileName:string}>).values()).map(({resolvedFileName})=>resolvedFileName)
+    resolvedModules = Array.from((source.resolvedModules as Map<any,{resolvedFileName:string}>).values()).filter(v=>v).map(({resolvedFileName})=>resolvedFileName)
     return resolvedModules
   }
   getImports = (file:string,imports = [file],program=this.server.getProgram()):string[]=>{
