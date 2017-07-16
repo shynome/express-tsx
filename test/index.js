@@ -1,3 +1,3 @@
 require('./ts')
 require('./compile')
-// require('./render')
+require('./render')

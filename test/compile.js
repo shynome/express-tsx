@@ -1,5 +1,5 @@
 require('./ts')
-const { Compile } = require('../dist')
+const { Compile } = require('../')
 const compiler = new Compile({ project:__dirname })
 const assert = require('assert')
 const _ = require('lodash')

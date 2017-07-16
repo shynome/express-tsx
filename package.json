@@ -18,6 +18,9 @@
     "express": "^4.15.3",
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
+    "open": "0.0.5",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
     "ts-node": "^3.2.0",
     "typescript": "^2.4.1"
   },
@@ -25,7 +28,7 @@
     "pretbuild": "rm -r dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
-    "test": "mocha test/index",
+    "test": "mocha test/index --timeout 999999",
     "prepublishOnly": "npm test"
   },
   "keywords": [
