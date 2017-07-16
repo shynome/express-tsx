@@ -41,7 +41,7 @@ export class Compile {
     let md5:string = this.hash[file]
     if(!md5){
       md5 = this.updateScriptVersion(file)
-      this.is_development && !Compile.ignore(file) && sys.watchFile(file,this.watch)
+      this.is_development && sys.watchFile(file,this.watch)
     }
     return md5
   }
