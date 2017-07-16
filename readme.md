@@ -58,6 +58,7 @@ export default ()=>
 #### 替换 `res.locals.express_tsx_html` 函数来输入你自己的 `html` 结构来应对 `seo` 等情况
 * 创建 [`html.js`](./test/html.js)
 * 在设置模板引擎的时候替换`express_tsx_html`函数, 相关代码片段:  
+  [源文件](./test/render.js)
   ```typescript
   const render2 = express()
   render2.use((req,res,next)=>{
@@ -69,6 +70,5 @@ export default ()=>
   render2.set('view engine','tsx')
   render2.use('/',(req,res)=>res.render(renderFile))
   ```
-  [源文件](./test/render.js)
 
 ***********
