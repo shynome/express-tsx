@@ -45,20 +45,19 @@ export default ()=>
 - 在浏览器中打开 [示例:http://127.0.0.1:9000/](http://127.0.0.1:9000/)  
   一切正常的话会看到 : `hello world`
 
-  # 实现流程
-* 插入 `require('express-tsx').middleware` 中间件
-  * 返回已编译的文件
-  * 注入要使用的数据
-* `express` 路由中指定要渲染的文件 , `res.render(file)`
+# 实现流程
+* 使用[`require('express-tsx').middleware`](./src/render/middleware.ts)中间件用来注入要使用的数据
+* `express` 中指定要渲染的文件 , `app.use('/path',(req,res)=>res.render(file))`
 * 使用 `typescript` 将该文件及其引用的文件进行编译
-* 使用 `res.locals.express_tsx_html` 函数 返回用来渲染界面的`html`文件
+* 调用用 `res.locals.express_tsx_html` 函数 返回用来渲染界面的`html`文件
+* 通过[`require('express-tsx').middleware`](./src/render/middleware.ts)返回编译成`es5`的`js`文件
 * 浏览器通过 [`browser.int.ts`](./static/browser.init.ts) 渲染界面
 
 # 深入使用
-* 替换`res.locals.express_tsx_html`函数来输入你自己的`html`结构来应对`seo`等情况
-  示例 :
-  * 创建 [`html.js`](./test/html.js)
-  * 在设置模板引擎的时候替换`express_tsx_html`函数 , [源文件](./test/render.js)
+## 示例1
+#### 替换 `res.locals.express_tsx_html` 函数来输入你自己的 `html` 结构来应对 `seo` 等情况
+* 创建 [`html.js`](./test/html.js)
+* 在设置模板引擎的时候替换`express_tsx_html`函数, 相关代码片段:  
   ```typescript
   const render2 = express()
   render2.use((req,res,next)=>{
@@ -70,3 +69,6 @@ export default ()=>
   render2.set('view engine','tsx')
   render2.use('/',(req,res)=>res.render(renderFile))
   ```
+  [源文件](./test/render.js)
+
+***********
