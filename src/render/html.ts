@@ -5,7 +5,7 @@ import path = require('path')
 export const browserInitPath = path.join(__dirname,'../../static/browser.init.ts')
 export const requirejsConfigPath = path.join(__dirname,'../../static/requirejs.browser.config.ts')
 export let html = async(file:string,data:data,view_data:ViewData):Promise<string>=>{
-  let compiler = data.res.app.compiler
+  let compiler = data.res.locals.express_tsx_compiler
       compiler.getScriptVersion(file)//compile entry file
   let imports = compiler.getImportsWithoutTypes(file)
   let preload_imports:string[] = [ browserInitPath, requirejsConfigPath, ...imports ]
