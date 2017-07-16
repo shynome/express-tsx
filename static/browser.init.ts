@@ -1,6 +1,7 @@
 declare var requirejs:any
 declare var define:any
-var imports:string[] = JSON.parse(document.scripts[document.scripts.length-1].text)
+void function(imports_str){
+  var imports:string[] = JSON.parse(imports_str)
   var regx = {
     nativeCode:/\[navtive code\]/,
     index:/\/index$/,
@@ -23,3 +24,4 @@ var imports:string[] = JSON.parse(document.scripts[document.scripts.length-1].te
   requirejs.config({
     map:all_map
   })
+}(document.scripts[document.scripts.length-1].text)
