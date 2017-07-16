@@ -22,7 +22,7 @@ export const render:ViewEngine = async(file,data,next)=>(async(file,data):Promis
     return `${callback}(${json})`
   }
   file = sys.resolvePath(file)
-  return html(file,data,view_data)
+  return data.express_tsx_html(file,data,view_data)
 })(file,data).then(
   (res)=>next(null,res),
   (err)=>next(err),
