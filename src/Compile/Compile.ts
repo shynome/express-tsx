@@ -81,7 +81,7 @@ export class Compile {
   getFileImports = (file,program=this.server.getProgram())=>{
     let source = program.getSourceFile(file) as any
     let resolvedModules:string[] = []
-    if(!source.resolvedModules){
+    if(!( source && source.resolvedModules )){
       return resolvedModules
     }
     resolvedModules = Array.from((source.resolvedModules as Map<any,{resolvedFileName:string}>).values()).filter(v=>v).map(({resolvedFileName})=>resolvedFileName)
