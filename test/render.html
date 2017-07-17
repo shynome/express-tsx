@@ -1,7 +1,13 @@
+<script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <script>
-async function finish(url){
-  await fetch(url)
-  window.close()
+function finish(url){
+  $.when()
+  .then(function(){
+    return $.get(url)
+  })
+  .then(function(){
+    window.close()
+  })
 }
 </script>
 <table>
