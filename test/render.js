@@ -4,7 +4,7 @@ const assert = require('assert')
 const server = exports.server = express()
 const express_tsx = require('../')
 const createServer = new Promise((resolve,reject)=>{
-  server.listen(8000,function(){
+  server.listen(function(){
     let port = this.address().port
     resolve(port)
   })
