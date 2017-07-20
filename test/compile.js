@@ -1,14 +1,15 @@
 const { Compile } = require('../')
-const compiler = new Compile({ project:__dirname })
+const compiler = new Compile()
 const assert = require('assert')
 const _ = require('lodash')
 const ts = require('typescript')
+const path = require('path')
 
 describe('import test',()=>{
   
   it(`import loop`,async()=>{
-    const file1 = require.resolve('./loop/a')
-    const file2 = require.resolve('./loop/b')
+    const file1 = path.join(__dirname,'./loop/a.ts')
+    const file2 = path.join(__dirname,'./loop/b.ts')
     ;([file1,file2]).forEach(compiler.getScriptVersion)
 
     let imports1 = compiler.getImports(file1)
@@ -22,7 +23,7 @@ describe('import test',()=>{
   })
 
   it(`import directly`,async()=>{
-    const file = require.resolve('./views')
+    const file = path.join(__dirname,'./views/index.tsx')
     compiler.getScriptVersion(file)
 
     let imports = compiler.getImports(file)
@@ -36,7 +37,7 @@ describe('import test',()=>{
   })
 
   it(`import async`,async()=>{
-    const file = require.resolve('./views/asyncImport')
+    const file = path.join(__dirname,'./views/asyncImport.ts')
     compiler.getScriptVersion(file)
 
     let imports = compiler.getImports(file)
@@ -53,7 +54,7 @@ describe('import test',()=>{
   })
 
   it('import deep path',async()=>{
-    const file = require.resolve('./views/importDeep')    
+    const file = path.join(__dirname,'./views/importDeep.ts')    
     compiler.getScriptVersion(file)
     let imports = compiler.getImports(file)
     assert(
@@ -66,7 +67,7 @@ describe('import test',()=>{
 })
 describe('Compile test',()=>{
 
-  const file = require.resolve('./views/importDeep.ts')
+  const file = path.join(__dirname,'./views/importDeep.ts')
   compiler.getScriptVersion(file)
   
   it('getSourceMap',async()=>{
