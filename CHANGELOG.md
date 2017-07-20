@@ -1,7 +1,13 @@
 # Change Log
 
-## [future]
-- ts2.4 `import()` 异步加载的文件会被提前推送 -> 不提前推送
+## [4.1.0]
+### 增加了下列 api
+- `exports.expressTsx(viewsDir?:string,app=express())`可直接获取一个设定好`express-tsx`视图引擎的`express`服务. 如果要配置已存在的服务话,把模板文件夹和已有的服务都传入进去就好了
+- `exports.expressTsxMiddleware`是`exports.middleware`的别名
+
+## [4.0.0]
+- 重写了`Compile`, 移除了`chokidar`依赖 , 文件监听更加具有针对性了
+- 修复了各种`linux`上的bug
 
 ## [3.1.23] - 2017-6-25
 ### fixed 
