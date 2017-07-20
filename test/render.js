@@ -2,7 +2,7 @@ require('./ts')
 const express = require('express')
 const assert = require('assert')
 const server = exports.server = express()
-const express_tsx = require('../')
+const { expressTsx, expressTsxMiddleware } = require('../')
 const createServer = new Promise((resolve,reject)=>{
   server.listen(function(){
     let port = this.address().port
@@ -11,23 +11,20 @@ const createServer = new Promise((resolve,reject)=>{
 }).then(port=>`http://127.0.0.1:${port}`)
 const renderFile = './views/index.tsx'
 //default
-const render1 = express()
-render1.engine('.tsx',express_tsx.render)
-render1.set('views',__dirname)
-render1.set('view engine','tsx')
+const render1 = expressTsx(__dirname)
 render1.use('/',(req,res)=>res.render(renderFile))
 //replace html
-const render2 = express()
+const render2 = expressTsx(__dirname)
 render2.use((req,res,next)=>{
-  res.locals.express_tsx_html = require('./html').html
+  let originTsxHTML = res.locals.express_tsx_html
+  res.locals.express_tsx_html = async(...r)=>{
+    return (await originTsxHTML(...r)).replace(`<body>`,`<body>render by diy html function`)
+  }
   next()
 })
-render2.engine('.tsx',express_tsx.render)
-render2.set('views',__dirname)
-render2.set('view engine','tsx')
 render2.use('/',(req,res)=>res.render(renderFile))
 //server
-server.use(express_tsx.middleware)
+server.use(expressTsxMiddleware)
 server.use('/render1',render1)
 server.use('/render2',render2)
 server.use( /\/$/,(req,res)=>res.sendfile((__dirname+'/render.html')))
@@ -44,6 +41,7 @@ const serverKeep = new Promise((resolve,reject)=>{
   })
 })
 const request = require('request-promise')
+let path = require('path')
 describe('render test',()=>{
   it('render view check by human',async()=>{
     let host = await createServer
