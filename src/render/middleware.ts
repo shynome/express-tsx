@@ -1,5 +1,7 @@
 import { Router,Response } from "express";
 export const middleware = Router()
+//alias name
+export const expressTsxMiddleware = middleware
 //express-tsx compiler handler
 export const express_tsx_middleware_path = '/express-tsx/'
 import { compiler } from "../Compile";

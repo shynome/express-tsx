@@ -1,5 +1,5 @@
 export { html, browserInitPath, requirejsConfigPath, } from './html'
 export { preload } from './preload'
 export { render } from './render'
-export { middleware } from './middleware'
+export { middleware,expressTsxMiddleware } from './middleware'
 export { requirejsConfig } from './requirejs.config'
