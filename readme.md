@@ -10,16 +10,13 @@ npm install express-tsx typescript --save
 # 使用示例
 [主文件](./example/server.js)
 ```javascript
-//创建 express 服务
-const express = require('express')
-const server = express()
+//创建包含 express-tsx 视图引擎的 express 服务
+const { expressTsx,expressTsxMiddleware } = require('../')
+const server = expressTsx(__dirname)
+//服务监听
 server.listen(9000,function(){ console.log(`server is running on ${this.address().port}`) })
-//设定视图引擎
-server.engine('.tsx',require('express-tsx').render)
-server.set('views',__dirname)
-server.set('view engie','tsx')//选择视图引擎
 //**注意**:在渲染视图前需要根路由注入中间件
-server.use(require('express-tsx').middleware)
+server.use(expressTsxMiddleware)
 //渲染视图
 server.use('/',(req,res)=>res.render('./view.tsx'))
 ```
@@ -40,7 +37,7 @@ export default ()=>
   ```
 - 安装依赖 ; 进入示例目录 ; 运行
   ```shell
-  cd example ; npm install ; npm start
+  npm install ; node example
   ```
 - 在浏览器中打开 [示例:http://127.0.0.1:9000/](http://127.0.0.1:9000/)  
   一切正常的话会看到 : `hello world`
@@ -56,18 +53,17 @@ export default ()=>
 # 深入使用
 ## 示例1
 #### 替换 `res.locals.express_tsx_html` 函数来输入你自己的 `html` 结构来应对 `seo` 等情况
-* 创建 [`html.js`](./test/html.js)
-* 在设置模板引擎的时候替换`express_tsx_html`函数, 相关代码片段:  
+* 替换`res.locals.express_tsx_html`函数, 相关代码片段:  
   [源文件](./test/render.js)
   ```typescript
-  const render2 = express()
+  const render2 = expressTsx(__dirname)
   render2.use((req,res,next)=>{
-    res.locals.express_tsx_html = require('./html').html
+    let originTsxHTML = res.locals.express_tsx_html
+    res.locals.express_tsx_html = async(...r)=>{
+      return (await originTsxHTML(...r)).replace(`<body>`,`<body>render by diy html function`)
+    }
     next()
   })
-  render2.engine('.tsx',express_tsx.render)
-  render2.set('views',__dirname)
-  render2.set('view engine','tsx')
   render2.use('/',(req,res)=>res.render(renderFile))
   ```
 
