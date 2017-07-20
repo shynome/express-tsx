@@ -1,4 +1,3 @@
-require('./ts')
 const { Compile } = require('../')
 const compiler = new Compile({ project:__dirname })
 const assert = require('assert')

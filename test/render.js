@@ -1,4 +1,3 @@
-require('./ts')
 const express = require('express')
 const assert = require('assert')
 const server = exports.server = express()
