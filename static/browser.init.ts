@@ -6,8 +6,8 @@ void function(global:any,imports_str){
     nativeCode:/\[navtive code\]/,
     index:/\/index$/,
   }
-  if(!regx.nativeCode.test(Array.prototype.forEach.toString())){ define('es5-shim',null) }
-  if(!regx.nativeCode.test(Array.prototype.forEach.toString())){ define('es6-shim',null) }
+  if('forEach' in Array.prototype && !regx.nativeCode.test(Array.prototype.forEach.toString())){ define('es5-shim',null) }
+  if('assign' in Object && !regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
   var map = imports.reduce(function(target,module){
     var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
     target[name] = module
