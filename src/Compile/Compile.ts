@@ -41,7 +41,7 @@ export class Compile {
     let md5:string = this.hash[file]
     if(!md5){
       md5 = this.updateScriptVersion(file)
-      this.is_development && sys.watchFile(file,this.watch)
+      this.development && sys.watchFile(file,this.watch)
     }
     return md5
   }
@@ -61,9 +61,9 @@ export class Compile {
     this.compilerOptions = { ...this.compilerOptions, ...Compile.defaultCompilerOptions, ...compilerOptions, }
     this.compilerOptionsHash = sys.createHash(JSON.stringify(this.compilerOptions))
   }
-  constructor(compilerOptions:ts.CompilerOptions={},is_development=!(/production/i.test(process.env.NODE_ENV))){
+  constructor(compilerOptions:ts.CompilerOptions={},development=!(/production/i.test(process.env.NODE_ENV))){
     this.init(compilerOptions)
-    this.is_development = is_development
+    this.development = development
     this.server = ts.createLanguageService({
       getCompilationSettings:()=>this.compilerOptions,
       getScriptFileNames:()=>Object.keys(this.hash),
@@ -74,7 +74,7 @@ export class Compile {
       resolveModuleNames:(moduleNames,containingFile)=>this.resolveModuleNames(moduleNames,containingFile),
     })
   }
-  is_development = false
+  development = false
   watch = (file)=>{
     this.updateScriptVersion(file)
   }
