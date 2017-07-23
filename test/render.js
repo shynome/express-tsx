@@ -42,6 +42,21 @@ const serverKeep = new Promise((resolve,reject)=>{
 const request = require('request-promise')
 let path = require('path')
 describe('render test',()=>{
+  it('requirejsConfig update',()=>{
+    const { Compile, requirejsConfig } = require('../')
+    const requirejsConfigPath = path.join(__dirname,'config.ts')
+    let compiler = new Compile({},false)
+    requirejsConfig({},compiler,requirejsConfigPath)
+    let first_code = compiler.getCompiledCode(requirejsConfigPath)
+    requirejsConfig({ paths:{ a:'b' } },compiler,requirejsConfigPath)
+    let second_code = compiler.getCompiledCode(requirejsConfigPath)    
+    assert(
+      first_code !== second_code,
+      `Two config codes should be diffrent`
+    )
+    //clear dist file
+    require('fs').unlinkSync(requirejsConfigPath)
+  })
   it('render view check by human',async()=>{
     let host = await createServer
     let [ res1 ,res2 ] = await Promise.all(
