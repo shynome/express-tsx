@@ -17,8 +17,10 @@ requirejs.config({
 export const getRequirejsConfig = ()=>requirejs.s.contexts._.config
 import { sys } from 'typescript'
 import { requirejsConfigPath } from "./html";
+import { compiler } from "../Compile";
 export const requirejsConfig = (config?:any)=>{
   requirejs.config(config)
   sys.writeFile(requirejsConfigPath,`requirejs.config(${JSON.stringify(getRequirejsConfig())})`)
+  !compiler.development && compiler.updateScriptVersion(requirejsConfigPath)
 }
 requirejsConfig()
