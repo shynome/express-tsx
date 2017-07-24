@@ -8,8 +8,8 @@ const path = require('path')
 describe('import test',()=>{
   
   it(`import loop`,async()=>{
-    const file1 = path.join(__dirname,'./loop/a.ts')
-    const file2 = path.join(__dirname,'./loop/b.ts')
+    const file1 = path.join(__dirname,'./loop/a.ts').replace(/\\/g,'/')
+    const file2 = path.join(__dirname,'./loop/b.ts').replace(/\\/g,'/')
     ;([file1,file2]).forEach(compiler.getScriptVersion)
 
     let imports1 = compiler.getImports(file1)
