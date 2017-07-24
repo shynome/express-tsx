@@ -33,10 +33,10 @@ export class ServerData {
     return filtered_data
   }
 }
-import { sys } from "typescript";
+import { join } from "path";
 middleware.use((req,res,next)=>{
   if(res.locals.express_tsx_basePath){ return next() }
-  res.locals.express_tsx_basePath = sys.resolvePath(req.baseUrl+express_tsx_middleware_path)
+  res.locals.express_tsx_basePath = join(req.baseUrl,express_tsx_middleware_path)
   res.locals.express_tsx_compiler = compiler
   res.locals.express_tsx_html = html
   res.locals.callback = req.query.callback
