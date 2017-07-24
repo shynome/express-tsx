@@ -10,7 +10,7 @@ export let html:html = async(file,data,view_data)=>{
       compiler.getScriptVersion(file)//compile entry file
   let imports = compiler.getImportsWithoutTypes(file)
   let preload_imports:string[] = [ browserInitPath, requirejsConfigPath, ...imports ]
-      preload_imports = preload_imports.map(m=>data.express_tsx_basePath+m+`?v=${compiler.getScriptVersion(m)}`)
+      preload_imports = preload_imports.map(m=>data.express_tsx_basePath+m+`?v=${compiler.getScriptVersion(m)}`).map((m)=>m.replace(/\\/g,'/'))
   let [ _browserInitPath, _requirejsConfigPath, ...imports_arr ] = preload_imports
   preload(data,preload_imports)
   return `<!DOCTYPE html>

@@ -144,6 +144,7 @@ export class Compile {
     let regx = Compile.regx
     let { pathname, query={} } = url
     let path:string = pathname.slice(regx.isLinux.test(pathname)?0:1)
+        path = sys.resolvePath(path)
     let isRequestSourceMap = regx.sourceMap.test(path)
     if( isRequestSourceMap ){ path = path.replace(regx.sourceMap,'') }
     let module = path.replace(Compile.regx.exts,'')
