@@ -6,7 +6,6 @@ export type Import = {
   module:string
   filename:string
 }
-import glob = require('glob')
 export class Compile {
   server:ts.LanguageService
   compilerOptions:ts.CompilerOptions = {}
