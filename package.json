@@ -4,6 +4,15 @@
   "description": "express view engine",
   "main": "dist/index.js",
   "types": "src/index.ts",
+  "scripts": {
+    "pretbuild": "rm -r dist",
+    "build": "tsc -p src",
+    "pretest": "npm run build",
+    "test": "mocha test/index --timeout 999999",
+    "prepublishOnly": "npm test",
+    "preexample":"npm run build",
+    "example":"node example"
+  },
   "dependencies": {
     "requirejs": "^2.3.3"
   },
@@ -23,13 +32,6 @@
     "request-promise": "^4.2.1",
     "ts-node": "^3.2.0",
     "typescript": "^2.4.1"
-  },
-  "scripts": {
-    "pretbuild": "rm -r dist",
-    "build": "tsc -p src",
-    "pretest": "npm run build",
-    "test": "mocha test/index --timeout 999999",
-    "prepublishOnly": "npm test"
   },
   "keywords": [
     "express",
