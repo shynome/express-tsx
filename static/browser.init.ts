@@ -28,11 +28,12 @@ void function module_map(global:any,imports_str){
 define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
 requirejs([ 'react','react-dom', imports[0], ],function render(React,ReactDOM,exports){
   var View = exports.View || exports.default || exports
-  var data = exports.props
+  var store = exports.props
   ReactDOM.render(
-    React.createElement(
+    React.isValidElement(View) ? View
+    : React.createElement(
       View,
-      data,
+      store,
     ),
     document.getElementById('app')
   )
