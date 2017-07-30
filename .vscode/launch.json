@@ -7,6 +7,13 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "example",
+      "preLaunchTask": "build",      
+      "program": "${workspaceRoot}/example/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Mocha Tests",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [
