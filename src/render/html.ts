@@ -20,28 +20,12 @@ export let html:html = async(file,data,view_data)=>{
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>${view_data.title}</title>
+  <script src="${requirejs.toUrl('requirejs')}"></script>
+  <script src="${_requirejsConfigPath}"></script>
 </head>
 <body>
   <div id="app"></div>
-  <script src="${requirejs.toUrl('requirejs')}"></script>
   <script src="${_browserInitPath}">${JSON.stringify(imports_arr)}</script>
-  <script src="${_requirejsConfigPath}"></script>
-  <script>
-  requirejs([
-    'react','react-dom',
-    imports[0],
-    location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'
-  ],function(React,ReactDOM,exports,data){
-    var View = exports && exports.View || exports.default || exports
-    ReactDOM.render(
-      React.createElement(
-        View,
-        data
-      ),
-      document.getElementById('app')
-    )
-  })
-  </script>
 </body>
 </html>
 `
