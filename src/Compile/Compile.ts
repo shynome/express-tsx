@@ -94,9 +94,9 @@ export class Compile {
   }
   static ignore = (file)=>{
     let result:boolean
-    if(
-        /node_modules/.test(file)
-    ||  /\.d\.ts$/.test(file)
+    if(0
+      ||  /node_modules/.test(file)
+      ||  /\.d\.ts$/.test(file)
     ){
       return true
     }
