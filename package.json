@@ -26,6 +26,7 @@
     "@types/node": "^8.0.9",
     "@types/react": "^15.6.0",
     "express": "^4.15.3",
+    "glamorous": "^3.25.0",
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
     "open": "0.0.5",
