@@ -17,7 +17,7 @@ export const browserInitPath = path.join(__dirname,'../../static/browser.init.ts
 export const requirejsConfigPath = path.join(__dirname,'../../static/requirejs.browser.config.ts')
 export const html = (arr:any)=>[].concat(arr).filter(v=>typeof v==='string').join('\r\n')
 export function render(file,data:ViewData,cb){
-  
+  compiler.getScriptVersion(file)//compile entry file
   data = new ViewData(data)
   let imports =  [ browserInitPath, requirejsConfigPath, ...compiler.getImportsWithoutTypes(file) ]
   let [ _browserInitPath, _requirejsConfigPath, ...imports_arr ] = imports.map(m=>data.express_tsx_basePath+m+`?v=${compiler.getScriptVersion(m)}`).map((m)=>m.replace(/\\/g,'/'))
