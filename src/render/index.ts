@@ -1,4 +1,4 @@
 
 export { render } from './render'
-export { middleware,expressTsxMiddleware } from './middleware'
+export { middleware,expressTsxMiddleware, compiler } from './middleware'
 export { requirejsConfig } from './requirejs.config'

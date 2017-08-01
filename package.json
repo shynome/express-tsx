@@ -17,19 +17,22 @@
     "requirejs": "^2.3.3"
   },
   "peerDependencies": {
+    "socket.io": "^2.0.3",
     "express": "^4.15.3",
     "typescript": "^2.4.1"
   },
   "devDependencies": {
     "@types/express": "^4.0.36",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.0.9",
+    "@types/node": "^8.0.18",
     "@types/react": "^15.6.0",
     "express": "^4.15.3",
+    "glamor": "^2.20.37",
     "glamorous": "^3.25.0",
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
     "open": "0.0.5",
+    "react": "^15.6.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "ts-node": "^3.2.0",

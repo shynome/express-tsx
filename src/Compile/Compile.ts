@@ -2,6 +2,7 @@ import ts = require('typescript')
 import Url = require('url')
 import { RequestHandler } from "express";
 import { sys } from 'typescript'
+import { EventEmitter } from "events";
 export type Import = {
   module:string
   filename:string
@@ -74,8 +75,14 @@ export class Compile {
     })
   }
   development = false
+  watcher = new EventEmitter()
   watch = (file)=>{
-    this.updateScriptVersion(file)
+    let lastScriptVersion = this.getScriptVersion(file)
+    let nowScriptVersion = this.updateScriptVersion(file)
+    if( nowScriptVersion === lastScriptVersion ){
+      return
+    }
+    this.watcher.emit('update',file)
   }
   getFileImports = (file,program=this.server.getProgram())=>{
     let source = program.getSourceFile(file) as any
@@ -169,4 +176,5 @@ export class Compile {
     }
     res.send(body)
   }
+  tourl = (baseurl:string)=>m=>(baseurl+m+`?v=${this.getScriptVersion(m)}`).replace(/\\/g,'/')
 }

@@ -1,4 +1,4 @@
-import { compiler } from "../Compile";
+import { compiler } from "./middleware";
 import requirejs = require('requirejs');
 export class ViewData {
   [key: string]: any
@@ -6,6 +6,10 @@ export class ViewData {
     Object.assign(this,data)
   }
   lang?:string = 'en'
+  hotreload?:boolean = false
+  express_tsx_basePath?:string
+  express_tsx_hotreload_path?:string
+  //seo
   description?:string
   keywords?:string
   title?:string = 'express-tsx'
@@ -16,11 +20,13 @@ import path = require('path')
 export const browserInitPath = path.join(__dirname,'../../static/browser.init.ts')
 export const requirejsConfigPath = path.join(__dirname,'../../static/requirejs.browser.config.ts')
 export const html = (arr:any)=>[].concat(arr).filter(v=>typeof v==='string').join('\r\n')
-export function render(file,data:ViewData,cb){
+export function render(file:string,data:ViewData,cb:any=()=>0){
   compiler.getScriptVersion(file)//compile entry file
   data = new ViewData(data)
-  let imports =  [ browserInitPath, requirejsConfigPath, ...compiler.getImportsWithoutTypes(file) ]
-  let [ _browserInitPath, _requirejsConfigPath, ...imports_arr ] = imports.map(m=>data.express_tsx_basePath+m+`?v=${compiler.getScriptVersion(m)}`).map((m)=>m.replace(/\\/g,'/'))
+  let tourl = compiler.tourl(data.express_tsx_basePath)
+  let imports = [ browserInitPath, requirejsConfigPath, ...compiler.getImportsWithoutTypes(file), ]
+      imports = imports.map(tourl)
+  let [ _browserInitPath, _requirejsConfigPath, ...imports_arr ] = imports
 
 cb(null,`<!DOCTYPE html>
 <html lang="${data.lang}">
@@ -39,8 +45,15 @@ cb(null,`<!DOCTYPE html>
 </head>
 <body>
   <div id="app"></div>
-  <script src="${_browserInitPath}">${JSON.stringify(imports_arr)}</script>
+  <script
+    src="${_browserInitPath}" 
+    data-baseurl="${data.express_tsx_basePath}"
+    data-hotreload="${data.hotreload?`${data.express_tsx_hotreload_path}`:''}"
+    >
+    ${JSON.stringify(imports_arr)}
+  </script>
 </body>
 </html>
 `)
+  return imports
 }

@@ -1,34 +1,83 @@
 declare var requirejs:any
 declare var define:any
 declare var imports:string[]
-void function module_map(global:any,imports_str){
-  var imports:string[] = global.imports = JSON.parse(imports_str)
-  var regx = {
+declare var EventSource:any
+new class App {
+  static regx = {
     nativeCode:/\[navtive code\]/,
     index:/\/index$/,
   }
-  if('assign' in Object && !regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
-  imports.forEach(function(module){
-    var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
-    define(name,[module],function(exports){ return exports })
-    if( regx.index.test(name) ){
-      name = name.replace(regx.index,'')
-      define(name,[module],function(exports){ return exports })
+  static normalize = (path:string)=>path.replace(/\\/g,'/')
+  static currentScript = document.scripts[document.scripts.length-1]
+  imports:string[] = JSON.parse(App.currentScript.innerText)
+  static hotreload = App.currentScript.dataset.hotreload
+  static dev = !!App.hotreload
+  static baseurl = App.currentScript.dataset.baseurl
+  static getModulename = module=>module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
+  static require = requirejs.s.contexts._
+  static exportModule = exports=>exports
+  static updateModule = (module)=>{
+    let name = App.getModulename(module)
+    let short_name = name.replace(App.regx.index,'')
+    let hasUpdate = 0
+    let defined = App.require.defined
+    for(let key in defined){
+      if(key.indexOf(short_name) === -1 ){ continue }
+      delete defined[key]
+      hasUpdate++
     }
+    App.defineModule(module)
+    return !!hasUpdate
+  }
+  static defineModule = (module:string)=>{
+    let name = App.getModulename(module)
+    define(name,[module],App.exportModule)
+    if( App.regx.index.test(name) ){
+      name = name.replace(App.regx.index,'')
+      define(name,[module],App.exportModule)
+    }
+    return name
+  }
+  constructor(){
+    define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
+    if('assign' in Object && !App.regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
+    this.main = this.imports.map(App.defineModule)[0]
+    requirejs([ ...this.deps, this.main, ],this.render)
+    App.dev && this.hotreload()
+  }
+  main:string
+  deps = ['react','react-dom']
+  static mount = document.getElementById('app')
+  render = (cb?:()=>void)=>requirejs(['require',this.main],function render(require,exports,){
+    const React = require('react')
+    const ReactDOM = require('react-dom')
+    var View = exports.View || exports.default || exports
+    var store = exports.props
+    ReactDOM.render(
+      React.isValidElement(View) ? View
+      : React.createElement(
+        View,
+        store,
+      ),
+      App.mount
+    )
+    typeof cb === 'function' && cb()
   })
-}(window,document.scripts[document.scripts.length-1].text,)
-define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
-requirejs([ 'react','react-dom', imports[0], ],function render(React,ReactDOM,exports){
-  var View = exports.View || exports.default || exports
-  var store = exports.props
-  //hooks store for hot reload
-  // ...code
-  ReactDOM.render(
-    React.isValidElement(View) ? View
-    : React.createElement(
-      View,
-      store,
-    ),
-    document.getElementById('app')
-  )
-})
+  watcher:any
+  hotreload = ()=>{
+    this.watcher = new EventSource(App.hotreload)
+    this.watcher.addEventListener('hotreload',this.update)
+  }
+  update = ({ data:module })=>{
+    let hasUpdate = App.updateModule(module)
+    if( !hasUpdate ){ return }
+    if(App.dev){
+      console.log(`has update module : ${module}`)
+      this.render(()=>{
+        console.log(`view has rerender!`)
+      })
+    }else{
+
+    }
+  }
+}
