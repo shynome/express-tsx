@@ -8,27 +8,21 @@ void function module_map(global:any,imports_str){
     index:/\/index$/,
   }
   if('assign' in Object && !regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
-  var map = imports.reduce(function(target,module){
+  imports.forEach(function(module){
     var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
-    target[name] = module
-    if(regx.index.test(name)){
-      target[name.replace(regx.index,'')] = module        
+    define(name,[module],function(exports){ return exports })
+    if( regx.index.test(name) ){
+      name = module.replace(regx.index,'')
+      define(name,[module],function(exports){ return exports })
     }
-    return target
-  },{})
-  var all_map = imports.reduce(function(target,module){
-    var name = module//.split('?').slice(0,1)[0].split('.').slice(0,-1)
-    target[name] = map
-    return target
-  },{})
-  requirejs.config({
-    map:all_map
   })
 }(window,document.scripts[document.scripts.length-1].text,)
 define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
 requirejs([ 'react','react-dom', imports[0], ],function render(React,ReactDOM,exports){
   var View = exports.View || exports.default || exports
   var store = exports.props
+  //hooks store for hot reload
+  // ...code
   ReactDOM.render(
     React.isValidElement(View) ? View
     : React.createElement(
