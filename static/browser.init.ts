@@ -12,7 +12,7 @@ void function module_map(global:any,imports_str){
     var name = module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
     define(name,[module],function(exports){ return exports })
     if( regx.index.test(name) ){
-      name = module.replace(regx.index,'')
+      name = name.replace(regx.index,'')
       define(name,[module],function(exports){ return exports })
     }
   })
