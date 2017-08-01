@@ -16,7 +16,7 @@ requirejs.config({
 })
 export const getRequirejsConfig = ()=>requirejs.s.contexts._.config
 import { sys } from 'typescript'
-import { requirejsConfigPath } from "./html";
+import { requirejsConfigPath } from "./render";
 import { compiler as default_compiler } from "../Compile";
 export const requirejsConfig = (config?:any,compiler=default_compiler,savePath=requirejsConfigPath)=>{
   requirejs.config(config)
