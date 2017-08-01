@@ -20,12 +20,10 @@ new class App {
     let name = App.getModulename(module)
     let short_name = name.replace(App.regx.index,'')
     let hasUpdate = 0
-    let defined = App.require.defined
-    for(let key in defined){
-      if(key.indexOf(short_name) === -1 ){ continue }
-      delete defined[key]
-      hasUpdate++
-    }
+    ;[ module, name, short_name ].forEach(m=>{
+      requirejs.defined(m) && hasUpdate++
+      requirejs.undef(m)
+    })
     App.defineModule(module)
     return !!hasUpdate
   }
@@ -48,9 +46,9 @@ new class App {
   main:string
   deps = ['react','react-dom']
   static mount = document.getElementById('app')
-  render = (cb?:()=>void)=>requirejs(['require',this.main],function render(require,exports,){
-    const React = require('react')
-    const ReactDOM = require('react-dom')
+  render = (cb?:()=>void)=>requirejs([this.main],function render(exports,){
+    const React = requirejs('react')
+    const ReactDOM = requirejs('react-dom')
     var View = exports.View || exports.default || exports
     var store = exports.props
     ReactDOM.render(
@@ -77,7 +75,7 @@ new class App {
         console.log(`view has rerender!`)
       })
     }else{
-
+      this.render()
     }
   }
 }
