@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "pretbuild": "rm -r dist",
+    "prebuild": "rm -r dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
     "test": "mocha test/index --timeout 999999",
