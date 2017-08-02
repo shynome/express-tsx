@@ -80,7 +80,6 @@ new class App {
     this.updateModule(this.imports[0])
     module.forEach(this.updateModule)
     if(App.dev){
-      console.log(`has update module : ${module}`)
       this.render(()=>{
         console.log(`view has rerender!`)
       })
