@@ -16,16 +16,13 @@ new class App {
   static getModulename = module=>module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
   static require = requirejs.s.contexts._
   static exportModule = exports=>exports
-  static updateModule = (module)=>{
+  updateModule = (module)=>{
     let name = App.getModulename(module)
     let short_name = name.replace(App.regx.index,'')
-    let hasUpdate = 0
-    ;[ name, module, short_name, ].forEach(m=>{
-      requirejs.defined(m) && hasUpdate++
-      requirejs.undef(m)
-    })
-    App.defineModule(module)
-    return !!hasUpdate
+    let modules = [ name, short_name, ]
+    name === this.main && modules.push(module)
+    modules.forEach(m=>requirejs.undef(m))
+    return App.defineModule(module)
   }
   static defineModule = (module:string)=>{
     let name = App.getModulename(module)
@@ -45,7 +42,6 @@ new class App {
   }
   main:string
   deps = ['react','react-dom']
-  static mount = document.getElementById('app')
   static catch = (func)=>{
     try{
       func()
@@ -53,35 +49,36 @@ new class App {
       console.error(err)
     }
   }
-  render = (cb?:()=>void)=>App.catch(requirejs([this.main],function render(exports,){
-    const React = requirejs('react')
-    const ReactDOM = requirejs('react-dom')
-    var View = exports.View || exports.default || exports
-    var store = exports.props
-    ReactDOM.render(
-      React.isValidElement(View) ? View
-      : React.createElement(
-        View,
-        store,
-      ),
-      App.mount
-    )
-    typeof cb === 'function' && cb()
-  }))
+  static mount = document.getElementById('app')
+  render = (cb?:()=>void)=>App.catch(requirejs(
+    [this.main],
+    (exports,)=>{
+      const React = requirejs('react')
+      const ReactDOM = requirejs('react-dom')
+      var View = exports.View || exports.default || exports
+      var store = exports.props
+      ReactDOM.render(
+        React.isValidElement(View) ? View
+        : React.createElement(
+          View,
+          store,
+        ),
+        App.mount
+      )
+      typeof cb === 'function' && cb()
+    },
+    (e)=>{
+      e.requireModules.forEach(m=>requirejs.undef(m))
+    }
+  ))
   watcher:any
   hotreload = ()=>{
     this.watcher = new EventSource(App.hotreload)
     this.watcher.addEventListener('hotreload',this.update)
   }
-  update = ({ data:module })=>{
-    let hasUpdate = App.updateModule(module)
-    let name = App.getModulename(module)
-    if( name !== this.main ){
-      App.updateModule(this.imports[0])
-    }else{
-      this.imports[0] = module
-    }
-    if( !hasUpdate ){ return }
+  update = ({ data })=>App.catch(()=>{
+    let module:string[] = JSON.parse(data)
+    module.forEach(this.updateModule)
     if(App.dev){
       console.log(`has update module : ${module}`)
       this.render(()=>{
@@ -90,5 +87,5 @@ new class App {
     }else{
       this.render()
     }
-  }
+  })
 }

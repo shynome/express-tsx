@@ -29,9 +29,10 @@ middleware.use(express_tsx_hotreload_path,function(req,res){
     '\n',//separator
   ].join('\n'))
   let listener = (file:string)=>{
+    let imports = compiler.getImportsWithoutTypes(file).map(compiler.tourl(res.locals.express_tsx_basePath)) //compile new import file
     res.write([
       'event: hotreload',
-      `data: ${compiler.tourl(res.locals.express_tsx_basePath)(file)}`,
+      `data: ${JSON.stringify(imports)}`,
       '\n',//separator
     ].join('\n'))
   }
