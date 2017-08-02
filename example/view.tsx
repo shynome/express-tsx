@@ -1,4 +1,7 @@
 import React = require('react');
+import { b } from './b'
+console.log(b)
+// debugger
 import glamorous from 'glamorous'
 const Styled = glamorous.div({
   '& h1':{
