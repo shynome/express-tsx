@@ -19,8 +19,7 @@ new class App {
   updateModule = (module)=>{
     let name = App.getModulename(module)
     let short_name = name.replace(App.regx.index,'')
-    let modules = [ name, short_name, ]
-    name === this.main && modules.push(module)
+    let modules = [ name, module, short_name, ]
     modules.forEach(m=>requirejs.undef(m))
     return App.defineModule(module)
   }
@@ -78,6 +77,7 @@ new class App {
   }
   update = ({ data })=>App.catch(()=>{
     let module:string[] = JSON.parse(data)
+    this.updateModule(this.imports[0])
     module.forEach(this.updateModule)
     if(App.dev){
       console.log(`has update module : ${module}`)
