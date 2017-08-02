@@ -20,7 +20,7 @@ new class App {
     let name = App.getModulename(module)
     let short_name = name.replace(App.regx.index,'')
     let hasUpdate = 0
-    ;[ module, name, short_name ].forEach(m=>{
+    ;[ name, module, short_name, ].forEach(m=>{
       requirejs.defined(m) && hasUpdate++
       requirejs.undef(m)
     })
@@ -46,7 +46,14 @@ new class App {
   main:string
   deps = ['react','react-dom']
   static mount = document.getElementById('app')
-  render = (cb?:()=>void)=>requirejs([this.main],function render(exports,){
+  static catch = (func)=>{
+    try{
+      func()
+    }catch(err){
+      console.error(err)
+    }
+  }
+  render = (cb?:()=>void)=>App.catch(requirejs([this.main],function render(exports,){
     const React = requirejs('react')
     const ReactDOM = requirejs('react-dom')
     var View = exports.View || exports.default || exports
@@ -60,7 +67,7 @@ new class App {
       App.mount
     )
     typeof cb === 'function' && cb()
-  })
+  }))
   watcher:any
   hotreload = ()=>{
     this.watcher = new EventSource(App.hotreload)
@@ -68,6 +75,12 @@ new class App {
   }
   update = ({ data:module })=>{
     let hasUpdate = App.updateModule(module)
+    let name = App.getModulename(module)
+    if( name !== this.main ){
+      App.updateModule(this.imports[0])
+    }else{
+      this.imports[0] = module
+    }
     if( !hasUpdate ){ return }
     if(App.dev){
       console.log(`has update module : ${module}`)
