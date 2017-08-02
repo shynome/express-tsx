@@ -20,6 +20,7 @@ new class App {
     let name = App.getModulename(module)
     let short_name = name.replace(App.regx.index,'')
     let modules = [ name, module, short_name, ]
+    if(name === this.main){ this.entry = module }
     modules.forEach(m=>requirejs.undef(m))
     return App.defineModule(module)
   }
@@ -32,14 +33,16 @@ new class App {
     }
     return name
   }
+  main:string
+  entry:string
   constructor(){
     define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
     if('assign' in Object && !App.regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
+    this.entry = this.imports[0]
     this.main = this.imports.map(App.defineModule)[0]
     requirejs([ ...this.deps, this.main, ],this.render)
     App.dev && this.hotreload()
   }
-  main:string
   deps = ['react','react-dom']
   static catch = (func)=>{
     try{
@@ -77,7 +80,7 @@ new class App {
   }
   update = ({ data })=>App.catch(()=>{
     let module:string[] = JSON.parse(data)
-    this.updateModule(this.imports[0])
+    this.updateModule(this.entry)
     module.forEach(this.updateModule)
     if(App.dev){
       this.render(()=>{
