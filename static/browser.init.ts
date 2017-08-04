@@ -2,6 +2,8 @@ declare var requirejs:any
 declare var define:any
 declare var imports:string[]
 declare var EventSource:any
+define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
+define('?state',()=>({}))
 new class App {
   static regx = {
     nativeCode:/\[navtive code\]/,
@@ -36,7 +38,6 @@ new class App {
   main:string
   entry:string
   constructor(){
-    define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
     if('assign' in Object && !App.regx.nativeCode.test(Object.assign.toString())){ define('es6-shim',null) }
     this.entry = this.imports[0]
     this.main = this.imports.map(App.defineModule)[0]
@@ -58,12 +59,12 @@ new class App {
       const React = requirejs('react')
       const ReactDOM = requirejs('react-dom')
       var View = exports.View || exports.default || exports
-      var store = exports.props
+      var props = exports.props
       ReactDOM.render(
         React.isValidElement(View) ? View
         : React.createElement(
           View,
-          store,
+          props,
         ),
         App.mount
       )
