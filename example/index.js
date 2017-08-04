@@ -9,6 +9,6 @@ server.use(expressTsxMiddleware)
 require('./requirejs.config')
 //渲染视图
 server.use('/',(req,res)=>{
-  if(!req.query.callback){ return res.render('./view.tsx') }
+  if(!req.query.callback){ return res.render('./views/index.tsx') }
   res.jsonp({word:'world'})
 })
