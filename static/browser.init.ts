@@ -2,7 +2,7 @@ declare var requirejs:any
 declare var define:any
 declare var imports:string[]
 declare var EventSource:any
-define('?props',[location.href+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
+define('?props',[location.href.split('#')[0]+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data)
 define('?state',()=>({}))
 // 这样你可以在 requirejs.config({ deps:[] }) 中配置环境依赖
 requirejs.config({ callback(){ new App() } })
