@@ -13,20 +13,32 @@ npm install express-tsx typescript --save
 //创建包含 express-tsx 视图引擎的 express 服务
 const { expressTsx,expressTsxMiddleware } = require('../')
 const server = expressTsx(__dirname)
+//开启 express-tsx 热更新 , 默认关闭
+server.locals.hotreload = true
 //服务监听
 server.listen(9000,function(){ console.log(`server is running on ${this.address().port}`) })
 //**注意**:在渲染视图前需要根路由注入中间件
 server.use(expressTsxMiddleware)
+require('./requirejs.config')
 //渲染视图
-server.use('/',(req,res)=>res.render('./view.tsx'))
+server.use(/\/$/,(req,res)=>{
+  if(!req.query.callback){ return res.render('./hello.tsx') }
+  res.jsonp({word:'world'})
+})
+//还在测试 redux 中 ; 但状态管理工具并不限制于 redux 
+server.get('/redux',(req,res)=>{
+  res.render('./views/index.tsx')
+})
 ```
-[视图文件](./example/view.tsx)
+[视图文件](./example/hello.tsx)
 ```jsx typescript
 import React = require('react')
 console.log('express-tsx' as any)
-export default ()=>
+export type Props = { word:string }
+export const props = require('?props');import '?props';
+export const View:React.StatelessComponent<Props> = (props)=>
 <div>
-  hello world
+  hello {props.word}
 </div>
 ```
 
@@ -50,21 +62,5 @@ export default ()=>
 * 通过[`require('express-tsx').middleware`](./src/render/middleware.ts)返回编译成`es5`的`js`文件
 * 浏览器通过 [`browser.int.ts`](./static/browser.init.ts) 渲染界面
 
-# 深入使用
-## 示例1
-#### 替换 `res.locals.express_tsx_html` 函数来输入你自己的 `html` 结构来应对 `seo` 等情况
-* 替换`res.locals.express_tsx_html`函数, 相关代码片段:  
-  [源文件](./test/render.js)
-  ```typescript
-  const render2 = expressTsx(__dirname)
-  render2.use((req,res,next)=>{
-    let originTsxHTML = res.locals.express_tsx_html
-    res.locals.express_tsx_html = async(...r)=>{
-      return (await originTsxHTML(...r)).replace(`<body>`,`<body>render by diy html function`)
-    }
-    next()
-  })
-  render2.use('/',(req,res)=>res.render(renderFile))
-  ```
 
 ***********
