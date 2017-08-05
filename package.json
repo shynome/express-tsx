@@ -17,7 +17,6 @@
     "requirejs": "^2.3.3"
   },
   "peerDependencies": {
-    "socket.io": "^2.0.3",
     "express": "^4.15.3",
     "typescript": "^2.4.1"
   },
