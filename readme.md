@@ -8,7 +8,7 @@ npm install express-tsx typescript --save
 ```
 
 # 使用示例
-[主文件](./example/server.js)
+[主文件](./example/index.js)
 ```javascript
 //创建包含 express-tsx 视图引擎的 express 服务
 const { expressTsx,expressTsxMiddleware } = require('../')
