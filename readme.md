@@ -59,7 +59,7 @@ export const View:React.StatelessComponent<Props> = (props)=>
 * 使用[`require('express-tsx').middleware`](./src/render/middleware.ts)中间件用来注入要使用的数据
 * `express` 中指定要渲染的文件 , `app.use('/path',(req,res)=>res.render(file))`
 * 使用 `typescript` 将该文件及其引用的文件进行编译
-* 调用用 `res.locals.express_tsx_html` 函数 返回用来渲染界面的`html`文件
+* 调用用 `render` 函数 返回用来渲染界面的`html`文件
 * 通过[`require('express-tsx').middleware`](./src/render/middleware.ts)返回编译成`es5`的`js`文件
 * 浏览器通过 [`browser.int.ts`](./static/browser.init.ts) 渲染界面
 
