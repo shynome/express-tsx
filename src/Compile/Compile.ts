@@ -14,6 +14,7 @@ export class Compile {
     target: ts.ScriptTarget.ES5,
     module:ts.ModuleKind.AMD,
     jsx:ts.JsxEmit.React,
+    experimentalDecorators: true,
     moduleResolution:ts.ModuleResolutionKind.NodeJs,
   }
   project:string = sys.getCurrentDirectory()
