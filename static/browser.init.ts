@@ -14,9 +14,9 @@ class App {
   static normalize = (path:string)=>path.replace(/\\/g,'/')
   static currentScript = document.scripts[document.scripts.length-1]
   imports:string[] = JSON.parse(App.currentScript.innerText)
-  static hotreload = App.currentScript.dataset.hotreload
+  static hotreload = App.currentScript.getAttribute('data-hotreload')
   static dev = !!App.hotreload
-  static baseurl = App.currentScript.dataset.baseurl
+  static baseurl = App.currentScript.getAttribute('data-baseurl')
   static getModulename = module=>module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0]
   static require = requirejs.s.contexts._
   static exportModule = exports=>exports
