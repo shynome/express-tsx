@@ -77,10 +77,10 @@ class App {
     }
   ))
   watcher:any
-  hotreload = ()=>{
+  hotreload = ()=>requirejs([typeof EventSource === 'function' || 'event-source-polyfill'],()=>{
     this.watcher = new EventSource(App.hotreload)
     this.watcher.addEventListener('hotreload',this.update)
-  }
+  })
   update = ({ data })=>App.catch(()=>{
     let module:string[] = JSON.parse(data)
     this.updateModule(this.entry)
