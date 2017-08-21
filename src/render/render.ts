@@ -17,8 +17,8 @@ export class ViewData {
   metas?:string[]
 }
 import path = require('path')
-export const browserInitPath = path.join(__dirname,'../../static/browser.init.ts')
-export const requirejsConfigPath = path.join(__dirname,'../../static/requirejs.browser.config.ts')
+export const browserInitPath:string = requirejs.tourl('browserInitPath')
+export const requirejsConfigPath:string = requirejs.tourl('requirejsConfigPath')
 export const html = (arr:any)=>[].concat(arr).filter(v=>typeof v==='string').join('\r\n')
 export function render(file:string,data:ViewData,cb:any=()=>0){
   compiler.getScriptVersion(file)//compile entry file
