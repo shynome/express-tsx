@@ -11,7 +11,7 @@ requirejs.config({
     'react-redux'             :'https://unpkg.com/react-redux@5.0.5/dist/react-redux.min.js#',
     'event-source-polyfill'   :'https://unpkg.com/event-source-polyfill@0.0.9/eventsource.min.js#',
     'browserInitPath'         :path.join(__dirname,'../../static/browser.init.ts'),
-    'requirejsConfigPath'     :path.join(__dirname,'../../static/requirejs.browser.config.ts')
+    'requirejsConfigPath'     :path.join(__dirname,'../../static/requirejs.browser.config.ts'),
   },
   shim:{
     'react'           :{ deps:['es6-shim'] },
@@ -19,9 +19,8 @@ requirejs.config({
 })
 export const getRequirejsConfig = ()=>requirejs.s.contexts._.config
 import { sys } from 'typescript'
-import { requirejsConfigPath } from "./render";
 import { compiler as default_compiler } from "./middleware";
-export const requirejsConfig = (config?:any,compiler=default_compiler,savePath=requirejsConfigPath)=>{
+export const requirejsConfig = (config?:any,compiler=default_compiler,savePath:string=requirejs.toUrl('requirejsConfigPath'))=>{
   requirejs.config(config)
   sys.writeFile(savePath,`requirejs.config(${JSON.stringify(getRequirejsConfig())})`)
   !compiler.development && compiler.updateScriptVersion(savePath)
