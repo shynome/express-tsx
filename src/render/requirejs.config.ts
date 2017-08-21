@@ -9,7 +9,7 @@ requirejs.config({
     'es6-shim'                :'https://unpkg.com/es6-shim@0.35.3/es6-shim.min.js#',
     'redux'                   :'https://unpkg.com/redux@3.7.2/dist/redux.min.js#',
     'react-redux'             :'https://unpkg.com/react-redux@5.0.5/dist/react-redux.min.js#',
-    'event-source-polyfill'   :'https://unpkg.com/event-source-polyfill@0.0.9/eventsource.min.js'
+    'event-source-polyfill'   :'https://unpkg.com/event-source-polyfill@0.0.9/eventsource.min.js#',
   },
   shim:{
     'react'           :{ deps:['es6-shim'] },
