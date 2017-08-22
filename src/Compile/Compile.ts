@@ -110,7 +110,8 @@ export class Compile {
     }
     return false
   }
-  getImportsWithoutTypes = (file:string)=>this.getImports(sys.resolvePath(file)).filter((file)=>!Compile.ignore(file))
+  static normalize = (f:string)=>sys.resolvePath(f).replace(/\\/g,'/')
+  getImportsWithoutTypes = (file:string)=>this.getImports(Compile.normalize(file)).filter((file)=>!Compile.ignore(file))
   getEmitOutput = (file)=>this.server.getEmitOutput(file)
   getSourceCode = (file)=>this.server.getProgram().getSourceFile(file).text
   getCompiledCode = (file)=>{
