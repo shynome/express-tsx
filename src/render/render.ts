@@ -49,7 +49,7 @@ cb(null,`<!DOCTYPE html>
   <script
     src="${_browserInitPath}" 
     data-baseurl="${data.express_tsx_basePath}"
-    data-hotreload="${data.hotreload?`${data.express_tsx_hotreload_path}`:''}"
+    data-hotreload="${data.hotreload?`${data.express_tsx_hotreload_path}?renderFile=${encodeURI(file)}`:''}"
     >
     ${JSON.stringify(imports_arr)}
   </script>
