@@ -177,5 +177,5 @@ export class Compile {
     }
     res.send(body)
   }
-  tourl = (baseurl:string)=>m=>(baseurl+m+`?v=${this.getScriptVersion(m)}`).replace(/\\/g,'/')
+  tourl = (baseurl:string)=>(m:string)=>(baseurl+m+`?v=${this.getScriptVersion(m)}`).replace(/\\/g,'/')
 }
