@@ -74,6 +74,7 @@ class App {
     },
     (e)=>{
       e.requireModules.forEach(m=>requirejs.undef(m))
+      throw e;
     }
   ))
   watcher:any
@@ -87,7 +88,7 @@ class App {
     module.forEach(this.updateModule)
     if(App.dev){
       this.render(()=>{
-        console.log(`view has rerender!`)
+        console.log(`________Rerender________`)
       })
     }else{
       this.render()
