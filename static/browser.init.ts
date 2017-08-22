@@ -84,7 +84,6 @@ class App {
   })
   update = ({ data })=>App.catch(()=>{
     let module:string[] = JSON.parse(data)
-    this.updateModule(this.entry)
     module.forEach(this.updateModule)
     if(App.dev){
       this.render(()=>{
