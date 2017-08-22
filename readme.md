@@ -1,12 +1,22 @@
 
 # 介绍
 tsx 文件的 express 的视图引擎 .  
-<del>警告 : 不能用于生产环境 , 没有打包, 使用的是直接加载模块文件</del>
+<del>警告 : 不要用于生产环境 , 没有打包, 使用的是直接加载模块文件</del>
 
 # 安装
 ```shell
 npm install express-tsx typescript --save
 ```
+
+# 特点
+- 有`sourcemap`支持, 可以轻松`debug`. 虽说默认是关闭的
+- 支持热更新, 虽说是默认关闭
+- `js`文件路径都带有`hash`值, 可以告别`ctrl`+`f5`了
+- 编译器是完全独立的, 只依赖 typescript. 
+- 编译器静态服务中间件只输出视图文件及其引用的文件, 不被引用的文件直接返回404, 所以你的文件是安全的
+- 可定制程度高, 不行看 [`render.ts`](./src/render/render.ts) 就知道到底有多高了
+- 虽然默认只支持`react`, 但可轻松扩展使其支持`Angular`. <del>并没有试过, 只是理论上应该可以的, 等人踩坑中</del>
+- 使用`requirejs`模块加载器, 配置模块的话,要使用`require('express-tsx').requirejsConfig(config)`函数, 可看示例 [example/requirejs.config.js](./example/requirejs.config.js)
 
 # 使用示例
 [主文件](./example/index.js)
@@ -44,26 +54,5 @@ export const View:React.StatelessComponent<Props> = (props)=>
   hello {props.word}
 </div>
 ```
-
-# 示例运行
-- 克隆本项目
-  ```shell
-  git clone https://github.com/shynome/express-tsx.git
-  ```
-- 安装依赖 ; 进入示例目录 ; 运行
-  ```shell
-  npm install ; node example
-  ```
-- 在浏览器中打开 [示例:http://127.0.0.1:9000/](http://127.0.0.1:9000/)  
-  一切正常的话会看到 : `hello world`
-
-# 实现流程
-* 使用[`require('express-tsx').middleware`](./src/render/middleware.ts)中间件用来注入要使用的数据
-* `express` 中指定要渲染的文件 , `app.use('/path',(req,res)=>res.render(file))`
-* 使用 `typescript` 将该文件及其引用的文件进行编译
-* 调用用 `render` 函数 返回用来渲染界面的`html`文件
-* 通过[`require('express-tsx').middleware`](./src/render/middleware.ts)返回编译成`es5`的`js`文件
-* 浏览器通过 [`browser.int.ts`](./static/browser.init.ts) 渲染界面
-
 
 ***********
