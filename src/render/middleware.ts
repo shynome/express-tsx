@@ -16,11 +16,6 @@ middleware.use((req,res,next)=>{
 })
 //hot reload
 export const express_tsx_hotreload_path = '/express-tsx-hotreload/'
-export const dispatchUpdate = (file)=>`
-event: hotreload
-data: ${JSON.stringify(file && [file,compiler.getScriptVersion(file)])}
-
-`
 middleware.use(express_tsx_hotreload_path,function(req,res){
   res.setHeader('Content-Type','text/event-stream')
   res.write([
