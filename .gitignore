@@ -1,4 +1,7 @@
 
+# test dynamic view file
+test/**/*.view.tsx
+
 #dist file
 dist
 static/requirejs.browser.config.ts
