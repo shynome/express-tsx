@@ -27,6 +27,7 @@ async function testRenderTextRight(word){
     return document.getElementById('text').innerText
   })
   assert.equal(word,text,`render fail`)
+  await chromeless.end()
   return text
 }
 it('base render',async()=>{

@@ -40,4 +40,6 @@ it('hot render',async()=>{
   assert.equal(text2,word2,'render fail')    
 
   assert.equal(text1===text2,false,`hot render fail`)
+
+  await chromeless.end()
 })
