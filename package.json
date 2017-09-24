@@ -10,8 +10,8 @@
     "pretest": "npm run build",
     "test": "mocha test/index --timeout 999999",
     "preversion": "npm test",
-    "preexample": "npm run build",
-    "example": "node example"
+    "presample": "npm run build",
+    "sample": "node sample"
   },
   "dependencies": {
     "requirejs": "^2.3.3"
