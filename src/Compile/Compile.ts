@@ -78,11 +78,6 @@ export class Compile {
   development = false
   watcher = new EventEmitter()
   watch = (file)=>{
-    let lastScriptVersion = this.getScriptVersion(file)
-    let nowScriptVersion = this.updateScriptVersion(file)
-    if( nowScriptVersion === lastScriptVersion ){
-      return
-    }
     this.watcher.emit('update',file)
   }
   getFileImports = (file,program=this.server.getProgram())=>{
