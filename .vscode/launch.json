@@ -40,7 +40,7 @@
         "--colors",
         "${workspaceRoot}/test/compile"
       ],
-      "cwd": "${workspaceRoot}/test",
+      "cwd": "${workspaceRoot}",
       "preLaunchTask": "build",      
       "internalConsoleOptions": "openOnSessionStart"
     },
@@ -57,7 +57,7 @@
         "--colors",
         "${workspaceRoot}/test/render"
       ],
-      "cwd": "${workspaceRoot}/test",
+      "cwd": "${workspaceRoot}",
       "preLaunchTask": "build",      
       "internalConsoleOptions": "openOnSessionStart"
     }
