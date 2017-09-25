@@ -23,22 +23,26 @@ it('hot render',async()=>{
   function getText(){
     return document.getElementById('text').innerText
   }
-  let word1 = '666', word2 = '777'
+  let triggerWords = ['666','777','888','9']
 
-  rewriteView(word1)
-  let text1 = await chromeless.wait('#text').evaluate(getText)
-  assert.equal(text1,word1,'render fail')
-
-  //clear
-  let x = await chromeless.evaluate(()=>{
-    document.getElementById('app').innerHTML = ''
-    return document.getElementById('app').innerHTML
-  })
-
-  rewriteView(word2)
-  let text2 = await chromeless.wait('#text').evaluate(getText)
-  assert.equal(text2,word2,'render fail')    
-
-  assert.equal(text1===text2,false,`hot render fail`)
-
+  async function triggerHotreloadByUseWord(/**@type {string}*/word){
+    rewriteView(word);
+    /**@type {string} */
+    let text = await chromeless.wait('#text').evaluate(getText)
+    assert.equal(text, word, "render fail");
+    //clear
+    let x = await chromeless.evaluate(()=>{
+      document.getElementById('app').innerHTML = ''
+      return document.getElementById('app').innerHTML
+    })
+    return text
+  }
+  let index = 0
+  let lastText = /**@type {string} */(null)
+  for(let word of triggerWords){
+    index++
+    let text = await triggerHotreloadByUseWord(word)
+    assert.equal(lastText===text,false,`the ${index} time hot render test fail. \r\n lastText:${lastText},now text:${text}`)
+    lastText = text
+  }
 })

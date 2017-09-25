@@ -55,7 +55,7 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceRoot}/test/render"
+        "${workspaceRoot}/test/render/index.js"
       ],
       "cwd": "${workspaceRoot}",
       "preLaunchTask": "build",      

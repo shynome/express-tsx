@@ -8,7 +8,7 @@
     "prebuild": "rm -r dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
-    "test": "mocha test/index --timeout 999999",
+    "test": "mocha test/index.js",
     "preversion": "npm test",
     "presample": "npm run build",
     "sample": "node sample"
