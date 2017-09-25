@@ -1,3 +1,7 @@
+/**
+ * 待修复
+ * 热更新出现问题, 有时候接收到热更新事件, 却并未触发界面更新
+ */
 declare var requirejs:any
 declare var define:any
 declare var imports:string[]
