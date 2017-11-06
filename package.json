@@ -8,8 +8,8 @@
     "prebuild": "rm -r dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
-    "test": "mocha test/index.js",
-    "preversion": "npm test",
+    "test": "#mocha test/index.js",
+    "preversion": ";",
     "presample": "npm run build",
     "sample": "node sample"
   },
