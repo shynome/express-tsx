@@ -7,7 +7,7 @@ const rewriteView = _rewriteView(ViewFile)
 rewriteView()
 
 //hot render test
-const { expressTsx,expressTsxMiddleware } = require('../../')
+const { expressTsx,expressTsxMiddleware } = require('../')
 const server = expressTsx(__dirname)
 server.use(expressTsxMiddleware)
 server.use((req,res,next)=>{

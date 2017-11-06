@@ -1,1 +1,0 @@
-export let asyncImport =  import('./')
