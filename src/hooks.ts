@@ -19,7 +19,9 @@ export const addHooks = (app:Express)=>{
   app.use(Vars.express_tsx_path,compiler.staticServer)
   //inject data
   app.use((req,res,next)=>{
-    if(res.locals.express_tsx_basePath){ return next() }
+    if(res.locals.app){ return next() }
+    res.locals.app = res.app
+    res.locals.baseUrl = req.baseUrl
     res.locals.express_tsx_basePath = path.join(req.baseUrl,Vars.express_tsx_path).replace(/\\/g,'/')
     res.locals.express_tsx_hotreload_path = path.join(req.baseUrl,Vars.express_tsx_hotreload_path).replace(/\\/g,'/')
     next()

@@ -7,9 +7,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "example",
-      "preLaunchTask": "build",
-      "program": "${workspaceRoot}/example/index.js"
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/test/a.js",
+      "preLaunchTask": "build"
     },
     {
       "type": "node",
@@ -25,40 +25,6 @@
         "${workspaceRoot}/test"
       ],
       "preLaunchTask": "build",
-      "internalConsoleOptions": "openOnSessionStart"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Compiler Tests",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-u",
-        "tdd",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceRoot}/test/compile"
-      ],
-      "cwd": "${workspaceRoot}",
-      "preLaunchTask": "build",      
-      "internalConsoleOptions": "openOnSessionStart"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "render Tests",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-u",
-        "tdd",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceRoot}/test/render/index.js"
-      ],
-      "cwd": "${workspaceRoot}",
-      "preLaunchTask": "build",      
       "internalConsoleOptions": "openOnSessionStart"
     }
   ]

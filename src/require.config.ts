@@ -1,4 +1,5 @@
 import { Express, Router, static as staticServer } from "express";
+import { Compile, Vars, key } from ".";
 import path = require('path')
 export type _any = { [key:string]:any }
 export type RequirejsConfig = {
@@ -20,8 +21,8 @@ export type RequirejsConfig = {
 export let defaultRequirejsConfig = {
   paths:{
     'requirejs'               :'https://unpkg.com/requirejs@2.3.4/require.js#',
-    'react'                   :'https://unpkg.com/react@15.6.1/dist/react.js#',
-    'react-dom'               :'https://unpkg.com/react-dom@15.6.1/dist/react-dom.js#',
+    'react'                   :'https://unpkg.com/react@16.0.0/umd/react.production.min.js#',
+    'react-dom'               :'https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js#',
     'css'                     :'https://unpkg.com/require-css@0.1.10/css.min.js#',
     'es6-shim'                :'https://unpkg.com/es6-shim@0.35.3/es6-shim.min.js#',
     'redux'                   :'https://unpkg.com/redux@3.7.2/dist/redux.min.js#',
@@ -36,20 +37,21 @@ export let defaultRequirejsConfig = {
   }
 }
 import Requirejs = require('requirejs')
-import { Compile, Vars, key } from "./";
 export let cursor = 0
 import crypto = require('crypto')
 export const requirejsConfig = (app:Express)=>(config:any={}):RequirejsConfig=>{
   let id = app.get(key.requirejsId)
   if(!id){
     id = `store${cursor++}`
-    Requirejs.config({ context:id }).config(defaultRequirejsConfig)
     app.set(key.requirejsId,id)
-    app.get(key.requirejsConfigJsPath,(req,res)=>res.type('js').send(res.app.get(key.requirejsConfigStr)))
+    const requirejs = Requirejs.config({ context:id, ...defaultRequirejsConfig })
+    app.set(key.requirejs,requirejs)
+    app.get(key.requirejsConfigJsPath,(req,res)=>res.type('js').header({maxAge:15*24*60*60}).send(res.app.get(key.requirejsConfigStr)))
   }
   config = transform(config,app)
-  config = Requirejs.config({ context:id }).config(config).s.contexts[id]
-  let configStr = `requirejs.config(${JSON.stringify(config)})`
+  Requirejs.config({ context:id, ...config })
+  config = Requirejs.s.contexts[id].config
+  let configStr = `requirejs.config(${JSON.stringify({ ...config, context:'_', })})`
   app.set(key.requirejsConfigStr,configStr)
   let hash = crypto.createHash('md5').update(configStr).digest('hex')
   app.set(key.requirejsConfigJsPathWithHash,`${key.requirejsConfigJsPath}?${hash}`)
