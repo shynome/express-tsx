@@ -1,11 +1,11 @@
 {
   "name": "express-tsx",
-  "version": "16.0.1",
+  "version": "4.0.1",
   "description": "express view engine to render tsx file",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "prebuild": "rm -r dist",
+    "prebuild": "rm -rf dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
     "test": "#mocha test/index.js",

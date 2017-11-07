@@ -4,6 +4,11 @@ declare var imports:string[]
 declare var EventSource:any 
 define('?props',[location.href.split('#')[0]+(location.href.indexOf('?')===-1?'?':'')+'&callback=define'],(data)=>data) 
 void function(){//scope
+  
+const isNavtiveFunc = /\[navtive code\]/i
+const noop = ()=>{}
+isNavtiveFunc.test(Promise.toString()) && define('es6-shim',[],noop)
+debugger
 
 const currentScript = document.scripts[document.scripts.length-1]
 let imports:string[] = JSON.parse(currentScript.innerText) 
@@ -13,7 +18,6 @@ const dev = !!hotreload
 const updatejs =  currentScript.getAttribute('data-updatejs')
 class Manager {
   static regx = { 
-    nativeCode:/\[navtive code\]/, 
     index:/\/index$/, 
   }
   static getModulename = module=>module.split('?').slice(0,1)[0].split('.').slice(0,-1)[0] 
@@ -45,17 +49,16 @@ class Manager {
 const getView = (exports)=>exports.View || exports.default || exports 
 const manager = new Manager(imports)
 requirejs(
-  ['react','react-dom',manager.main,].concat(dev && [updatejs, typeof EventSource !== 'function' && 'event-source-polyfill']),
-function(react,ReactDOM,exports,updatejs){
+  ['react','react-dom',manager.main,].concat(dev && [typeof EventSource !== 'function' && 'event-source-polyfill']),
+function(react,ReactDOM,exports){
   //AppContainer
   let view = getView(exports)
   let props = exports.props
-  const deepForceUpdate = updatejs ? updatejs.default : ()=>{}
   class AppContainer extends (react.Component as { new ():any }) {
     constructor(...r){
       super(...r)
       this.state = this.props
-      if(updatejs){
+      if(dev){
         let watcher = new EventSource(hotreload) 
         watcher.addEventListener('hotreload',this.update)
       }
@@ -69,9 +72,6 @@ function(react,ReactDOM,exports,updatejs){
           props: exports.props,
         })
       })
-    }
-    componentWillReceiveProps(){
-      deepForceUpdate(this)
     }
     render(){
       let { view, props } = this.state
