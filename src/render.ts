@@ -5,6 +5,7 @@ export const html = (arr:any)=>[].concat(arr).filter(v=>typeof v==='string').joi
 export function render(file:string,data:any,cb:any=()=>0){
   const app:Express = data.app
   const compiler:Compile = app.get(key.compiler)
+  compiler.compilerOptions.sourceMap = compiler.development
   const requirejs = app.get(key.requirejs)
   compiler.getScriptVersion(file)//compile files
   const tourl = compiler.tourl(data.express_tsx_basePath)
