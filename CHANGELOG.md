@@ -1,7 +1,10 @@
 # Change Log
 
-## [next]
-- 动态更新: 配合`redux`达到不损失状态得更新界面
+## [5.x.x]
+- [ √ ] 每个 `expressTsx` 实例都有单独的 `tsconfig` 配置
+- [ √ ] 编译器封装独立成一个单独包 `express-tsx-compiler`
+- [ × ] 不损失状态下进行热更新
+
 
 ## [4.2.6]
 - 不再强制使用 `?callback=define` 获取初始化数据 , 转而提供一个 `?props` 路径以供获取数据
