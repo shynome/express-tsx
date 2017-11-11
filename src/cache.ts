@@ -1,10 +1,11 @@
-import { data, render as Render } from "./render";
+import { data, render } from "./render";
 import { createHash } from "crypto";
 import { cacheDir } from ".";
 import path = require('path')
 import fse = require('fs-extra')
 export type cb = (err:Error,html:string)=>any
-export const render = async(file:string,data:data,cb?:cb)=>{
+
+export const renderWithCache = async(file:string,data:data,cb?:cb)=>{
   const { cache } = data
   const hash = createHash('md5').update(JSON.stringify(data)).digest('hex')
   const cacheFile = path.join(cacheDir,file.replace(/\|\//g,'_'))
@@ -14,7 +15,7 @@ export const render = async(file:string,data:data,cb?:cb)=>{
   }
   let html:string,error:Error
   html=error=null
-  await Render(file,data).then(
+  await render(file,data).then(
     (renderedString)=>html=renderedString,
     (catchedError)=>error=catchedError,
   )
