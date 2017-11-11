@@ -14,7 +14,9 @@
     "sample": "node sample"
   },
   "dependencies": {
+    "consolidate": "^0.15.0",
     "express-tsx-compiler": "^1.0.0",
+    "fs-extra": "^4.0.2",
     "requirejs": "^2.3.3"
   },
   "peerDependencies": {
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.0.36",
+    "@types/fs-extra": "^4.0.4",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.18",
     "@types/react": "^15.6.0",

@@ -5,7 +5,8 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "lib": [
-      "es2016"
+      "es2016",
+      "dom"
     ],
     "outDir": "../dist"
   }
