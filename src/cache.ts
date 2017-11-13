@@ -11,7 +11,7 @@ fse.mkdirpSync(cacheDir)
 export const getCacheFileWithHash = (file:string,data:data)=>{
   const { compilerId, compiler } = data
   const hash = createHash('md5').update(JSON.stringify({ ...data, compiler:compilerId })).digest('hex')
-  const cacheFileWithHash = path.join(cacheDir,compilerId+'.'+file.replace(/\:|\\|\//g,'_')+'.'+hash)
+  const cacheFileWithHash = path.join(cacheDir,compilerId+'.'+file.replace(/\:|\\|\//g,'_')+'.'+hash+'.html')
   return cacheFileWithHash
 }
 export const renderWithCache = async(file:string,data:data,cb?:cb)=>{
