@@ -9,10 +9,10 @@ describe('render',()=>{
     const url = '/render.base'
     server.use(url,app)
     app.get('/',(req,res)=>res.render('./view.tsx'))
-    const chromeless = new Chromeless() 
-    const loadUrl = baseurl+url
-    console.log(loadUrl)
-    await new Promise(rl=>setTimeout(rl,60*60*1e3))
+    // const chromeless = new Chromeless() 
+    // const loadUrl = baseurl+url
+    // console.log(loadUrl)
+    await new Promise(rl=>setTimeout(rl,24*60*60*1e3))
     // let a = await chromeless.goto(loadUrl).wait('body').
   })
 })

@@ -1,31 +1,35 @@
-import { data, render } from "./render";
+import { data, render, getCompiledImports } from "./render";
 import { createHash } from "crypto";
 import { cacheDir } from ".";
 import path = require('path')
 import fse = require('fs-extra')
 export type cb = (err:Error,html:string)=>any
-
+//clear last cache
+fse.removeSync(cacheDir)
+//make cache dir
+fse.mkdirpSync(cacheDir)
+export const getCacheFileWithHash = (file:string,data:data)=>{
+  const { compilerId, compiler } = data
+  const hash = createHash('md5').update(JSON.stringify({ ...data, compiler:compilerId })).digest('hex')
+  const cacheFileWithHash = path.join(cacheDir,compilerId+'.'+file.replace(/\:|\\|\//g,'_')+'.'+hash)
+  return cacheFileWithHash
+}
 export const renderWithCache = async(file:string,data:data,cb?:cb)=>{
-  const { cache, compilerId } = data
-  const hash = createHash('md5').update(JSON.stringify(data)).digest('hex')
-  const cacheFile = path.join(cacheDir,file.replace(/\|\//g,'_'))
-  const cacheFileWithHash = compilerId+'.'+cacheFile+'.'+hash
-  if( cache && fse.existsSync(cacheFileWithHash) ){
-    return await fse.readFile(cacheFileWithHash,'utf8')
-  }
+  const { cache } = data
   let html:string,error:Error
   html=error=null
+  if( cache ){
+    let cacheFileWithHash = getCacheFileWithHash(file,data)
+    if(await fse.pathExists(cacheFileWithHash)){
+      html = await fse.readFile(cacheFileWithHash,'utf8')
+    }
+  }
   await render(file,data).then(
     (renderedString)=>html=renderedString,
     (catchedError)=>error=catchedError,
   )
   if(cache){
-    //clear last cache
-    let files = await fse.readdir(cacheDir)
-    await Promise.all(files.map(async(filepath)=>{
-      if(filepath.indexOf(cacheFile)!==0)return;
-      await fse.unlink(filepath)
-    }))
+    let cacheFileWithHash = getCacheFileWithHash(file,data)
     await fse.writeFile(cacheFileWithHash,html)
   }
   //return

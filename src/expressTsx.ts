@@ -14,6 +14,7 @@ export const expressTsx = (viewsDir?:string,app=express())=>{
     res.locals.baseUrl = req.baseUrl
     next()
   })
+  app.locals.cache = true
   app.locals[key.compilerId] = `compiler${cursor++}`
   const compiler = app.locals[key.compiler] = new Compile()
   app.use(Vars.express_tsx_path,compiler.staticServer)

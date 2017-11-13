@@ -1,6 +1,7 @@
 
 # test dynamic view file
 test/**/*.view.tsx
+test/.express-tsx-cache
 
 #dist file
 dist

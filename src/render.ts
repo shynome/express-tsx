@@ -9,7 +9,7 @@ export type renderData = {
   requirejsConfigJsPathWithHash:string
   hotreload:boolean
 }
-export class htmlData {
+export class HtmlData {
   [key:string]:any
   lang?:string = 'en'
   title?:string = 'express-tsx'
@@ -19,9 +19,10 @@ export class htmlData {
   loading?:string = 'loading'
   foots?:string[] = []
 }
-export type data = renderData & htmlData
+export type data = renderData & HtmlData
 import path = require('path')
 import Requirejs = require('requirejs')
+export const getCompiledImports = (file:string,compiler:Compile):string[]=>[ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
 export const render = async(file:string,data:data):Promise<string>=>{
   let {
     compiler, 
@@ -35,8 +36,7 @@ export const render = async(file:string,data:data):Promise<string>=>{
   const requirejs = Requirejs.config({ context: requirejsId })
   const tourl = compiler.tourl(express_tsx_basePath)
   requirejsConfigJsPathWithHash = baseUrl + requirejsConfigJsPathWithHash
-  let imports = [ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
-  let [ _browserInitPath, _deepForceUpdate, ...imports_arr ] = imports.map(tourl)
+  let [ browserInitPath, deepForceUpdate, ...imports_arr ] = getCompiledImports(file,compiler).map(tourl)
 return `<!DOCTYPE html>
 <html>
 <head>
@@ -50,10 +50,10 @@ return `<!DOCTYPE html>
 <body>
   <div id="app"></div>
   <script
-    src="${_browserInitPath}" 
+    src="${browserInitPath}" 
     data-baseurl="${data.express_tsx_basePath}"
     data-hotreload="${hotreload?`${express_tsx_hotreload_path}?renderFile=${encodeURI(file)}`:''}"
-    data-updatejs="${_deepForceUpdate}"
+    data-updatejs="${deepForceUpdate}"
     >
     ${JSON.stringify(imports_arr)}
   </script>
