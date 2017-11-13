@@ -9,7 +9,7 @@
     "build": "tsc -p src",
     "pretest": "npm run build",
     "test": "mocha test/index.ts --require ./test/ts",
-    "preversion": "npm run build",
+    "preversion": "npm run test",
     "presample": "npm run build",
     "sample": "node sample"
   },

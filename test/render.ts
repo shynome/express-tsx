@@ -3,7 +3,6 @@ import { server, getLocalUrl } from ".";
 import { expressTsx } from "..";
 import { Chromeless } from 'chromeless'
 describe('render',()=>{
-  console.log('test')
   it('base',async()=>{
     let baseurl = await getLocalUrl
     const app = expressTsx(__dirname)
