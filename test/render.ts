@@ -12,13 +12,14 @@ describe('render',()=>{
     app.get('/',(req,res)=>res.render('./view.tsx'))
     // const chromeless = new Chromeless() 
     // const loadUrl = baseurl+url
-    // console.log(loadUrl)
+    // // console.log(loadUrl)
+    // await new Promise(rl=>setTimeout(rl,24*60*60*1e3))
     // let a = await chromeless.goto(loadUrl).wait('body').
   })
   it('hotreload',async()=>{
 
   })
   it('Multiple different compilers',async()=>{
-
+    
   })
 })

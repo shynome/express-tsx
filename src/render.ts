@@ -14,17 +14,18 @@ export class HtmlData {
   [key:string]:any
   lang?:string = 'en'
   title?:string = 'express-tsx'
-  keywords?:string|string[] = []
+  keywords?:string = ''
   description?:string = ''
-  heads?:string[] = []
+  generator?:string = 'express-tsx'
+  heads?:string = ''
   loading?:string = 'loading'
-  foots?:string[] = []
+  foots?:string = ''
 }
 export type data = { settings:renderData } & HtmlData
 import path = require('path')
 import Requirejs = require('requirejs')
 export const getCompiledImports = (file:string,compiler:Compile):string[]=>[ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
-export const echoif = (x,str)=>x != false ? str : ''
+export const echoif = (x,str=x)=>x != false ? str : ''
 export const render = async(file:string,data:data):Promise<string>=>{
   let {
     compiler, 
@@ -45,11 +46,16 @@ return `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>${data.title}</title>
+  ${echoif(data.title,`<title>${data.title}</title>`)}
+  ${echoif(data.keywords,`<meta name="keywords" content="${data.keywords}">`)}
+  ${echoif(data.description,`<meta name="description" content="${data.description}">`)}
+  ${echoif(data.generator,`<meta name="generator" content="${data.generator}">`)}
+  ${echoif(data.heads)}
   <script src="${requirejs.toUrl('requirejs')}"></script>
   <script src="${requirejsConfigJsPathWithHash}"></script>
 </head>
 <body>
+  ${echoif(data.foots)}
   <div id="app"></div>
   <script
     src="${browserInitPath}" 
@@ -59,6 +65,7 @@ return `<!DOCTYPE html>
     >
     ${JSON.stringify(imports_arr)}
   </script>
+  ${echoif(data.foots)}
 </body>
 </html>
 `

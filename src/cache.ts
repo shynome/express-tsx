@@ -1,4 +1,4 @@
-import { data, render, getCompiledImports } from "./render";
+import { data, render, getCompiledImports, renderData } from "./render";
 import { createHash } from "crypto";
 import { cacheDir } from ".";
 import path = require('path')
@@ -9,7 +9,7 @@ fse.removeSync(cacheDir)
 //make cache dir
 fse.mkdirpSync(cacheDir)
 export const getCacheFileWithHash = (file:string,data:data)=>{
-  const { compilerId, compiler } = data
+  const { compilerId, compiler } = data.settings as renderData
   const hash = createHash('md5').update(JSON.stringify({ ...data, compiler:compilerId })).digest('hex')
   const cacheFileWithHash = path.join(cacheDir,compilerId+'.'+file.replace(/\:|\\|\//g,'_')+'.'+hash+'.html')
   return cacheFileWithHash
