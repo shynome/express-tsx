@@ -5,7 +5,8 @@ export type renderData = {
   compiler:Compile
   compilerId:string
   requirejsId:string
-  express_tsx_basePath:string
+  express_tsx_path:string
+  express_tsx_hotreload_path:string
   requirejsConfigJsPathWithHash:string
   hotreload:boolean
 }
@@ -19,28 +20,27 @@ export class HtmlData {
   loading?:string = 'loading'
   foots?:string[] = []
 }
-export type data = renderData & HtmlData
+export type data = { settings:renderData } & HtmlData
 import path = require('path')
 import Requirejs = require('requirejs')
 export const getCompiledImports = (file:string,compiler:Compile):string[]=>[ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
-export const AddBaseUrl = (baseUrl:string)=>(url:string)=>path.join(baseUrl,url).replace(/\\/g,'/')
+export const echoif = (x,str)=>x != false ? str : ''
 export const render = async(file:string,data:data):Promise<string>=>{
   let {
     compiler, 
     requirejsId,
     requirejsConfigJsPathWithHash,
     baseUrl,
+    express_tsx_path,
+    express_tsx_hotreload_path,
     hotreload,
-  } = data
-  const addBaseUrl = AddBaseUrl(baseUrl)
-  const express_tsx_path = addBaseUrl(Vars.express_tsx_path)
-  const express_tsx_hotreload_path = addBaseUrl(Vars.express_tsx_hotreload_path)
+  } = data.settings
   const requirejs = Requirejs.config({ context: requirejsId })
   const tourl = compiler.tourl(express_tsx_path)
   requirejsConfigJsPathWithHash = baseUrl + requirejsConfigJsPathWithHash
   let [ browserInitPath, deepForceUpdate, ...imports_arr ] = getCompiledImports(file,compiler).map(tourl)
 return `<!DOCTYPE html>
-<html>
+<html ${echoif(data.lang,`lang=${data.lang}`)}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

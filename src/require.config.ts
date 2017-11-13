@@ -48,8 +48,8 @@ import Requirejs = require('requirejs')
 export let cursor = 0
 import crypto = require('crypto')
 export const bindRequirejsConfig = (app:Express)=>{
-  app.locals[key.requirejsId] = `store${cursor++}`
-  Object.defineProperty(app.locals,key.requirejsConfig,{
+  app.settings[key.requirejsId] = `store${cursor++}`
+  Object.defineProperty(app.settings,key.requirejsConfig,{
     get(){ return Requirejs.s.contexts[this.requirejsId].config },
     set(config){
       Requirejs.config({ context:this.requirejsId, ...config })
@@ -64,11 +64,11 @@ export const bindRequirejsConfig = (app:Express)=>{
     }
   })
   //set default config
-  app.locals[key.requirejsConfig] = defaultRequirejsConfig
+  app.settings[key.requirejsConfig] = defaultRequirejsConfig
   //set url
   app.get(
     key.requirejsConfigJsPath,
     (req,res)=>
-      res.type('js').header({maxAge:15*24*60*60}).send(res.app.locals[key.requirejsConfigStr])
+      res.type('js').header({maxAge:15*24*60*60}).send(res.app.settings[key.requirejsConfigStr])
   )
 }
