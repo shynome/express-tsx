@@ -1,3 +1,4 @@
+process.chdir(__dirname)
 import Express = require('express')
 export const server = Express()
 export const getLocalUrl:Promise<string> = new Promise((rl,rj)=>{
