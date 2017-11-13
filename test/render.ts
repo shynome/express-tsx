@@ -13,7 +13,12 @@ describe('render',()=>{
     // const chromeless = new Chromeless() 
     // const loadUrl = baseurl+url
     // console.log(loadUrl)
-    await new Promise(rl=>setTimeout(rl,24*60*60*1e3))
     // let a = await chromeless.goto(loadUrl).wait('body').
+  })
+  it('hotreload',async()=>{
+
+  })
+  it('Multiple different compilers',async()=>{
+
   })
 })
