@@ -19,8 +19,6 @@ export const enum Vars {
   express_tsx_path = '/express-tsx/',
   express_tsx_hotreload_path = '/express-tsx-hotreload/',
 }
-
-import './render'
 export const cacheDir = path.join(process.cwd(),'./.express-tsx-cache')
 import { renderWithCache } from "./cache";
 require('consolidate')['tsx'] = renderWithCache

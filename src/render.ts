@@ -1,13 +1,12 @@
-import { Compile, cacheDir, browserInitPath, deepForceUpdatePath } from ".";
+import { Compile, Vars, cacheDir, browserInitPath, deepForceUpdatePath } from ".";
 export type renderData = {
-  baseurl:string
+  baseUrl:string
   cache:true
   compiler:Compile
   compilerId:string
   requirejsId:string
   express_tsx_basePath:string
   requirejsConfigJsPathWithHash:string
-  baseUrl:string
   hotreload:boolean
 }
 export class htmlData {
@@ -27,15 +26,15 @@ export const render = async(file:string,data:data):Promise<string>=>{
   let {
     compiler, 
     requirejsId,
-    express_tsx_basePath,
     requirejsConfigJsPathWithHash,
-    baseurl,
-    express_tsx_hotreload_path,
+    baseUrl,
     hotreload,
   } = data
+  const express_tsx_basePath = path.join(baseUrl,Vars.express_tsx_path).replace(/\\/g,'/')
+  const express_tsx_hotreload_path = path.join(baseUrl,Vars.express_tsx_hotreload_path).replace(/\\/g,'/')
   const requirejs = Requirejs.config({ context: requirejsId })
   const tourl = compiler.tourl(express_tsx_basePath)
-  requirejsConfigJsPathWithHash = baseurl + requirejsConfigJsPathWithHash
+  requirejsConfigJsPathWithHash = baseUrl + requirejsConfigJsPathWithHash
   let imports = [ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
   let [ _browserInitPath, _deepForceUpdate, ...imports_arr ] = imports.map(tourl)
 return `<!DOCTYPE html>

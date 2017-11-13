@@ -1,11 +1,8 @@
 import Express = require('express')
 export const server = Express()
-export const getPort:Promise<number> = new Promise((rl,rj)=>{
-  server.listen(300,function(){
-    rl(this.address().port)
+export const getLocalUrl:Promise<string> = new Promise((rl,rj)=>{
+  server.listen(3000,function(){
+    rl(`http://localhost:${this.address().port}`)
   }).once('error',rj)
 })
-describe('x',()=>{
-  console.log(555)
-  it('x',()=>{})
-})
+require('./render')
