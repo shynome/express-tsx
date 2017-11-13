@@ -8,7 +8,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc -p src",
     "pretest": "npm run build",
-    "test": "#mocha test/index.js",
+    "test": "mocha test/index.ts --require ./test/ts",
     "preversion": "npm run build",
     "presample": "npm run build",
     "sample": "node sample"

@@ -6,10 +6,10 @@ import fse = require('fs-extra')
 export type cb = (err:Error,html:string)=>any
 
 export const renderWithCache = async(file:string,data:data,cb?:cb)=>{
-  const { cache } = data
+  const { cache, compilerId } = data
   const hash = createHash('md5').update(JSON.stringify(data)).digest('hex')
   const cacheFile = path.join(cacheDir,file.replace(/\|\//g,'_'))
-  const cacheFileWithHash = cacheFile+hash+'.'
+  const cacheFileWithHash = compilerId+'.'+cacheFile+'.'+hash
   if( cache && fse.existsSync(cacheFileWithHash) ){
     return await fse.readFile(cacheFileWithHash,'utf8')
   }

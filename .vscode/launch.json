@@ -7,22 +7,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/test/a.js",
-      "preLaunchTask": "build"
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Mocha Tests",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [
         "-u",
         "tdd",
-        "--timeout",
-        "999999",
+        "--timeout", "999999",
+        "--require", ".\/test\/ts",
         "--colors",
-        "${workspaceRoot}/test"
+        "${workspaceRoot}/test/index.ts"
       ],
       "preLaunchTask": "build",
       "internalConsoleOptions": "openOnSessionStart"

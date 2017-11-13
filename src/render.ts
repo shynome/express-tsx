@@ -1,11 +1,14 @@
 import { Compile, cacheDir, browserInitPath, deepForceUpdatePath } from ".";
 export type renderData = {
+  baseurl:string
   cache:true
   compiler:Compile
+  compilerId:string
   requirejsId:string
   express_tsx_basePath:string
   requirejsConfigJsPathWithHash:string
   baseUrl:string
+  hotreload:boolean
 }
 export class htmlData {
   [key:string]:any
@@ -27,13 +30,14 @@ export const render = async(file:string,data:data):Promise<string>=>{
     express_tsx_basePath,
     requirejsConfigJsPathWithHash,
     baseurl,
+    express_tsx_hotreload_path,
+    hotreload,
   } = data
   const requirejs = Requirejs.config({ context: requirejsId })
-  const tourl = compiler.tourl(data.express_tsx_basePath)
+  const tourl = compiler.tourl(express_tsx_basePath)
   requirejsConfigJsPathWithHash = baseurl + requirejsConfigJsPathWithHash
   let imports = [ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
-  imports = imports.map(tourl)
-  let [ _browserInitPath, deepForceUpdate, ...imports_arr ] = imports
+  let [ _browserInitPath, _deepForceUpdate, ...imports_arr ] = imports.map(tourl)
 return `<!DOCTYPE html>
 <html>
 <head>
@@ -49,8 +53,8 @@ return `<!DOCTYPE html>
   <script
     src="${_browserInitPath}" 
     data-baseurl="${data.express_tsx_basePath}"
-    data-hotreload="${data.hotreload?`${data.express_tsx_hotreload_path}?renderFile=${encodeURI(file)}`:''}"
-    data-updatejs="${deepForceUpdate}"
+    data-hotreload="${hotreload?`${express_tsx_hotreload_path}?renderFile=${encodeURI(file)}`:''}"
+    data-updatejs="${_deepForceUpdate}"
     >
     ${JSON.stringify(imports_arr)}
   </script>
