@@ -11,10 +11,12 @@ export const expressTsx = (viewsDir?:string,app=express())=>{
   app.set('view engine','tsx')
   //set render data
   app.use((req,res,next)=>{
-    res.locals.baseUrl = req.baseUrl
+    res.app.locals.baseUrl = req.baseUrl
     next()
   })
-  app.locals.cache = true
+  const dev = !/production/i.test(app.get('env'))
+  app.locals.cache = !dev
+  app.locals.hotreload = dev
   app.locals[key.compilerId] = `compiler${cursor++}`
   const compiler = app.locals[key.compiler] = new Compile()
   app.use(Vars.express_tsx_path,compiler.staticServer)

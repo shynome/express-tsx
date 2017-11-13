@@ -1,2 +1,2 @@
 import React = require('react')
-export default <div>7777</div>
+export default <div>3333</div>

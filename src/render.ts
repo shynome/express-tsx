@@ -23,6 +23,7 @@ export type data = renderData & HtmlData
 import path = require('path')
 import Requirejs = require('requirejs')
 export const getCompiledImports = (file:string,compiler:Compile):string[]=>[ browserInitPath, deepForceUpdatePath, ...compiler.getImportsWithoutTypes(file), ]
+export const AddBaseUrl = (baseUrl:string)=>(url:string)=>path.join(baseUrl,url).replace(/\\/g,'/')
 export const render = async(file:string,data:data):Promise<string>=>{
   let {
     compiler, 
@@ -31,10 +32,11 @@ export const render = async(file:string,data:data):Promise<string>=>{
     baseUrl,
     hotreload,
   } = data
-  const express_tsx_basePath = path.join(baseUrl,Vars.express_tsx_path).replace(/\\/g,'/')
-  const express_tsx_hotreload_path = path.join(baseUrl,Vars.express_tsx_hotreload_path).replace(/\\/g,'/')
+  const addBaseUrl = AddBaseUrl(baseUrl)
+  const express_tsx_path = addBaseUrl(Vars.express_tsx_path)
+  const express_tsx_hotreload_path = addBaseUrl(Vars.express_tsx_hotreload_path)
   const requirejs = Requirejs.config({ context: requirejsId })
-  const tourl = compiler.tourl(express_tsx_basePath)
+  const tourl = compiler.tourl(express_tsx_path)
   requirejsConfigJsPathWithHash = baseUrl + requirejsConfigJsPathWithHash
   let [ browserInitPath, deepForceUpdate, ...imports_arr ] = getCompiledImports(file,compiler).map(tourl)
 return `<!DOCTYPE html>

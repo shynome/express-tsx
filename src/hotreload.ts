@@ -1,8 +1,9 @@
-import { Compile, key } from ".";
+import { Compile, key, Vars } from ".";
 import { RequestHandler } from "express";
+import { renderData, AddBaseUrl } from "./render";
 //hot reload
 export const hotreload:RequestHandler = (req,res)=>{
-  const compiler:Compile = res.locals[key.compiler]
+  let { compiler, baseUrl } = res.app.locals as renderData
   res.setHeader('Content-Type','text/event-stream')
   const renderFile:string = Compile.normalize(req.param('renderFile',''))
   let imports:string[] = renderFile ? compiler.getImportsWithoutTypes(renderFile) : null
@@ -11,7 +12,8 @@ export const hotreload:RequestHandler = (req,res)=>{
     'data: ping',
     '\n',//separator
   ].join('\n'))
-  const imports2url = compiler.tourl(res.locals.express_tsx_basePath)
+  const express_tsx_basePath = AddBaseUrl(baseUrl)(Vars.express_tsx_path)
+  const imports2url = compiler.tourl(express_tsx_basePath)
   let listener = (file:string)=>{
     file = Compile.normalize(file)
     if( imports && !imports.includes(file) ){ // if you not set the render file, you will get the uncorrelated hotreload event

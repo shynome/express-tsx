@@ -6,6 +6,7 @@ describe('render',()=>{
   it('base',async()=>{
     let baseurl = await getLocalUrl
     const app = expressTsx(__dirname)
+    app.locals.cache = true
     const url = '/render.base'
     server.use(url,app)
     app.get('/',(req,res)=>res.render('./view.tsx'))
