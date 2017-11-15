@@ -22,10 +22,8 @@ export const expressTsx = (viewsDir?:string,app=express())=>{
   app.locals.cache = !dev
   app.settings.hotreload = dev
   app.settings[key.compilerId] = `compiler${cursor++}`
-  const compiler = app.settings[key.compiler] = new Compile({ project:viewsDir })
-  const compiler2 = app.settings[key.compiler] = new Compile({})
-  debugger
-  app.use(Vars.express_tsx_path,compiler.staticServer)
+  app.settings[key.compiler] = new Compile(viewsDir)
+  app.use(Vars.express_tsx_path,app.settings[key.compiler].staticServer)
   Object.defineProperty(
     app.settings, 'express_tsx_path',
     { get(){ return AddBaseUrl(this.baseUrl,Vars.express_tsx_path) } }
