@@ -56,7 +56,7 @@ return `<!DOCTYPE html>
   <script src="${requirejsConfigJsPathWithHash}"></script>
 </head>
 <body>
-  ${echoif(data.foots)}
+  ${echoif(data.loading)}
   <div id="app"></div>
   <script
     src="${browserInitPath}" 
