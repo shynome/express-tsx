@@ -49,26 +49,34 @@ export let cursor = 0
 import crypto = require('crypto')
 export const bindRequirejsConfig = (app:Express)=>{
   app.settings[key.requirejsId] = `store${cursor++}`
-  Object.defineProperty(app.settings,key.requirejsConfig,{
-    get(){ return Requirejs.s.contexts[this.requirejsId].config },
-    set(config){
-      Requirejs.config({ context:this.requirejsId, ...config })
-      config = this[key.requirejsConfig]
-      //remake config str
-      let configStr =
-          this[key.requirejsConfigStr] = 
-          `requirejs.config(${JSON.stringify({ ...config, context:'_', })})`
-      //update hash path
-      let hash = crypto.createHash('md5').update(configStr).digest('hex')
-      this[key.requirejsConfigJsPathWithHash] = `${key.requirejsConfigJsPath}?${hash}`
+  Object.defineProperty(
+    app.settings, key.requirejsConfig,
+    {
+      get(){ return Requirejs.s.contexts[this.requirejsId].config },
+      set(config){
+        Requirejs.config({ context:this.requirejsId, ...config })
+        config = this[key.requirejsConfig]
+        //remake config str
+        let configStr =
+            this[key.requirejsConfigStr] = 
+            `requirejs.config(${JSON.stringify({ ...config, context:'_', })})`
+        //update hash path
+        let hash = crypto.createHash('md5').update(configStr).digest('hex')
+        this[key.requirejsConfigJsPathWithHash] = `${key.requirejsConfigJsPath}?${hash}`
+      }
     }
-  })
+  )
   //set default config
   app.settings[key.requirejsConfig] = defaultRequirejsConfig
   //set url
   app.get(
     key.requirejsConfigJsPath,
-    (req,res)=>
-      res.type('js').header({maxAge:15*24*60*60}).send(res.app.settings[key.requirejsConfigStr])
+    (req,res)=>{
+      res
+      .type('js')
+      //过期时间和 compiler 的过期时间保持一致
+      .header('Cache-Control',`max-age=${(res.app.settings[key.compiler] as Compile).jsExpiredTime}`)
+      .send(res.app.settings[key.requirejsConfigStr])
+    }
   )
 }
