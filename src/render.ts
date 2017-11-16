@@ -39,6 +39,7 @@ export const render = async(file:string,data:data):Promise<string>=>{
   const requirejs = Requirejs.config({ context: requirejsId })
   const tourl = compiler.tourl(express_tsx_path)
   requirejsConfigJsPathWithHash = baseUrl + requirejsConfigJsPathWithHash
+  compiler.getScriptVersion(file)
   let [ browserInitPath, deepForceUpdate, ...imports_arr ] = getCompiledImports(file,compiler).map(tourl)
 return `<!DOCTYPE html>
 <html ${echoif(data.lang,`lang=${data.lang}`)}>
