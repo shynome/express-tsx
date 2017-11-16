@@ -10,6 +10,7 @@
     "pretest": "npm run build",
     "test": "mocha test/index.ts --require ./test/ts",
     "preversion": "npm run test",
+    "postversion": "git push",
     "presample": "npm run build",
     "sample": "node sample"
   },
