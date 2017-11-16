@@ -1,6 +1,6 @@
 {
   "name": "express-tsx",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "description": "express view engine to render tsx file",
   "main": "dist/index.js",
   "types": "src/index.ts",
