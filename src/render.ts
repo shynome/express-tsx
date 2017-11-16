@@ -18,7 +18,7 @@ export class HtmlData {
   description?:string = ''
   generator?:string = 'express-tsx'
   heads?:string = ''
-  loading?:string = 'loading'
+  loading?:string = ''
   foots?:string = ''
 }
 export type data = { settings:renderData } & HtmlData
@@ -56,8 +56,7 @@ return `<!DOCTYPE html>
   <script src="${requirejsConfigJsPathWithHash}"></script>
 </head>
 <body>
-  ${echoif(data.loading)}
-  <div id="app"></div>
+  <div id="app">${echoif(data.loading)}</div>
   <script
     src="${browserInitPath}" 
     data-baseurl="${data.express_tsx_basePath}"
