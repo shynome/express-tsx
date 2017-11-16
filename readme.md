@@ -3,7 +3,8 @@
 ## 使用
 
 ```js
-var render = expressTsx(requirejsConfig,compiler=new Compiler())
+/**@type {Express}*/
+var app = expressTsx(viewsDir="/views",compiler=new Compiler())
 
 ```
 
