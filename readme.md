@@ -4,7 +4,7 @@
 
 ```js
 /**@type {Express}*/
-var app = expressTsx(viewsDir="/views",compiler=new Compiler())
+var app = expressTsx(viewsDir="/views",compiler=Express())
 
 ```
 
