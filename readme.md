@@ -1,10 +1,11 @@
 # 文档
+**当前版本不适合用于生产环境**
 
 ## 使用
 
 ```js
 /**@type {Express}*/
-var app = expressTsx(viewsDir="/views",compiler=Express())
+var app = expressTsx(viewsDir="/views",app=Express())
 
 ```
 
