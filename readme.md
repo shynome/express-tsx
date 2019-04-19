@@ -1,3 +1,10 @@
+# 废弃声明
+
+该仓库是在不知道有 [webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware) 的情况下开发的, 知道之后发现没有意义已停止开发
+
+请使用 [webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware) 代替
+
+
 # 文档
 **当前版本不适合用于生产环境,因为测试不完善**
 
